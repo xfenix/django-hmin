@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 from django.utils.html import strip_spaces_between_tags
-try:
-    from django.conf import settings
-except ImportError:
-    settings = None
+from django.conf import settings
 
 
 """ Minification html middleware
@@ -20,6 +17,7 @@ RE_REPLACED_TAG = re.compile(
 RE_PLACEHOLDER = re.compile(
     ur'%s' % (PLACEHOLDER.replace('%s', '([0-9]+)'))
 )
+ENABLED = getattr(settings, 'HTML_MINIFY', not settings.DEBUG)
 EXCLUDE = []
 
 if hasattr(settings, 'EXCLUDE_FROM_MINIFYING'):
@@ -53,7 +51,7 @@ class MinMiddleware(object):
                 return response
 
         if 'Content-Type' in response and\
-           'text/html' in response['Content-Type'] and settings.HTML_MINIFY:
+           'text/html' in response['Content-Type'] and ENABLED:
             response.content = strip_spaces_between_tags(
                 response.content.strip()
             )
