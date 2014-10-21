@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 
 # bla bla, license
-
 from setuptools import setup, find_packages
 from hmin import __version__
 
 
-README = open('README.md').read()
+try:
+    readme = open('README.md').read()
+except:
+    readme = 'Cool minification middleware for Django'
 
 setup(
     name='django-hmin',
     version=__version__,
     description='html minify middleware for django',
-    long_description=README,
+    long_description=readme,
     author='Xfenix',
     author_email='ad@xfenix.ru',
     packages=find_packages(),

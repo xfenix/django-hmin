@@ -45,6 +45,11 @@ need to set it to ``True`` if you want to minify your HTML code when ``DEBUG``
 is enabled.
 
 
+Tests
+===================
+?
+
+
 License
 ===================
 Who cares? Use it whatever you want.
