@@ -5,14 +5,12 @@ from django.conf import settings
 
 
 """ Minification html middleware
-
-reduce client-side traffic
 """
 PLACEHOLDER = '<special_%s_safemarker>'
 RE_MULTISPACE = re.compile(ur'\s{2,}')
 RE_NEWLINE = re.compile(ur'\n')
 RE_REPLACED_TAG = re.compile(
-    ur'(<(script|textarea|pre).*?>.*?</(script|textarea|pre)>)', re.S
+    ur'(<(script|textarea|style|pre).*?>.*?</(script|textarea|style|pre)>)', re.S
 )
 RE_PLACEHOLDER = re.compile(
     ur'%s' % (PLACEHOLDER.replace('%s', '([0-9]+)'))
