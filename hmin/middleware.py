@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 
-from base import Minify
+from base import minify
 
 
 """ Minification html middleware
 """
 ENABLED = getattr(settings, 'HTML_MINIFY', not settings.DEBUG)
 EXCLUDE = []
-minifier = Minify()
 
 
 if hasattr(settings, 'EXCLUDE_FROM_MINIFYING'):
@@ -36,5 +35,5 @@ class MinMiddleware(object):
 
         if 'Content-Type' in response and\
            'text/html' in response['Content-Type'] and ENABLED:
-            response.content = minifier.process(response.content)
+            response.content = minify(response.content)
         return response

@@ -1,38 +1,38 @@
 # -*- coding: utf-8 -*-
 import re
-from django.utils.html import strip_spaces_between_tags
 
 
-PLACEHOLDER = '<special_%s_safemarker>'
-RE_MULTISPACE = re.compile(ur'\s{2,}')
-RE_NEWLINE = re.compile(ur'\n')
+PLACEHOLDER = '[#_idk_%s_lol_#]'
 RE_REPLACED_TAG = re.compile(
     ur'(<(script|textarea|style|pre).*?>.*?</(script|textarea|style|pre)>)', re.S
 )
+RE_COMMENTS = re.compile(ur'<!--.*?-->', re.S)
 RE_PLACEHOLDER = re.compile(
     ur'%s' % (PLACEHOLDER.replace('%s', '([0-9]+)'))
 )
 
 
-class Minify(object):
+def minify(content, remove_comments=True):
+    # helpers
+    tag_replace = lambda m: safe_storage[m.start()] = m.group(1);\
+                            PLACEHOLDER % m.start()
+    tag_return = lambda m: safe_storage[int(m.group(1))]
     safe_storage = dict()
 
-    def tag_replace(self, match):
-        self.safe_storage[match.start()] = match.group(1)
-        return PLACEHOLDER % match.start()
+    # decode unicode
+    try:
+        content = content.decode('utf-8')
+    except (UnicodeDecodeError, UnicodeEncodeError):
+        pass
 
-    def tag_return(self, match):
-        return self.safe_storage[int(match.group(1))]
+    # replace dangerous tags with placeholders
+    content = RE_REPLACED_TAG.sub(tag_replace, content)
 
-    def process(self, content):
-        content = strip_spaces_between_tags(content.strip())
+    # remove garbadge (spaces, comments, newlines)
+    content = ' '.join(content.split())
+    content = content.replace('> <', '><')
+    if remove_comments:
+        content = RE_COMMENTS.sub('', content)
 
-        # replace real tags with placeholders
-        content = RE_REPLACED_TAG.sub(self.tag_replace, content)
-
-        # remove garbadge
-        content = RE_MULTISPACE.sub(' ', content)
-        content = RE_NEWLINE.sub('', content)
-
-        # return tags instead of placeholders
-        return RE_PLACEHOLDER.sub(self.tag_return, content)
+    # return tags instead of placeholders
+    return RE_PLACEHOLDER.sub(tag_return, content)
