@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 
-from base import minify
+from hmin import minify
 
 
 """ Minification html middleware

@@ -5,8 +5,14 @@ from setuptools import setup, find_packages
 from hmin import __version__
 
 
+readme = 'README.md'
+
 try:
-    readme = open('README.md').read()
+    readme = open(
+        os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), readme
+        )
+    ).read()
 except:
     readme = 'Cool minification middleware for Django'
 

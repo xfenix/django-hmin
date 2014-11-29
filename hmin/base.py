@@ -2,22 +2,24 @@
 import re
 
 
-PLACEHOLDER = '[#_idk_%s_lol_#]'
+PLACEHOLDER = '<@!softwrapper_%s_lol_!@>'
 RE_REPLACED_TAG = re.compile(
     ur'(<(script|textarea|style|pre).*?>.*?</(script|textarea|style|pre)>)', re.S
 )
-RE_COMMENTS = re.compile(ur'<!--.*?-->', re.S)
+RE_COMMENTS = re.compile(ur'<!--(?!\[if.*?\]).*?-->', re.S | re.I)
 RE_PLACEHOLDER = re.compile(
-    ur'%s' % (PLACEHOLDER.replace('%s', '([0-9]+)'))
+    ur'%s' % PLACEHOLDER.replace('%s', '([0-9]+)')
 )
 
 
 def minify(content, remove_comments=True):
     # helpers
-    tag_replace = lambda m: safe_storage[m.start()] = m.group(1);\
-                            PLACEHOLDER % m.start()
-    tag_return = lambda m: safe_storage[int(m.group(1))]
-    safe_storage = dict()
+    def tag_replace(m):
+        safe_storage[m.start()] = m.group(1)
+        return PLACEHOLDER % m.start()
+
+    def tag_return(m):
+        return safe_storage[int(m.group(1))]
 
     # decode unicode
     try:
@@ -26,6 +28,7 @@ def minify(content, remove_comments=True):
         pass
 
     # replace dangerous tags with placeholders
+    safe_storage = dict()
     content = RE_REPLACED_TAG.sub(tag_replace, content)
 
     # remove garbadge (spaces, comments, newlines)
