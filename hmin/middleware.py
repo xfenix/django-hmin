@@ -7,7 +7,7 @@ from .base import minify
 """ Minification html middleware
 """
 ENABLED = getattr(settings, 'HTML_MINIFY', not settings.DEBUG)
-REMOVE_COMMENTS = gettattr(settings, 'HMIN_REMOVE_COMMENTS', True)
+REMOVE_COMMENTS = getattr(settings, 'HMIN_REMOVE_COMMENTS', True)
 EXCLUDE = []
 
 
