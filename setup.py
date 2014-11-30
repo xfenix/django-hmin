@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-
-# bla bla, license
 from setuptools import setup, find_packages
 from hmin import __version__
 
@@ -8,18 +6,20 @@ from hmin import __version__
 readme = 'README.md'
 
 try:
+    import pypandoc
+    read = lambda: pypandoc.convert(readme, 'rst')
+except:
     readme = open(
         os.path.join(
             os.path.dirname(os.path.abspath(__file__)), readme
         )
     ).read()
-except:
-    readme = 'Cool minification middleware for Django'
+
 
 setup(
     name='django-hmin',
     version=__version__,
-    description='html minify middleware for django',
+    description='HTML minification function, django middleware, decorator',
     long_description=readme,
     author='Xfenix',
     author_email='ad@xfenix.ru',
