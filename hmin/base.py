@@ -44,5 +44,3 @@ def minify(content, remove_comments=True):
         content.replace(key, value)
 
     return content
-    #return content
-    # return RE_PLACEHOLDER.sub(tag_return, content).strip()
