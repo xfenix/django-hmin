@@ -5,7 +5,7 @@ except ImportError:
     import re
 
 
-PLACEHOLDER = '<@!hmin_placeholder_%s_lol_!@>'
+PLACEHOLDER = '<@!hmin_placeholder_%s_!@>'
 RE_REPLACED_TAG = re.compile(
     ur'(<(script|textarea|style|pre).*?>.*?</(script|textarea|style|pre)>)', re.S
 )
@@ -38,6 +38,6 @@ def minify(content, remove_comments=True):
 
     # and return dangerous tags back
     for key, value in safe_storage.items():
-        content.replace(key, value)
+        content = content.replace(key, value)
 
     return content
