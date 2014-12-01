@@ -10,20 +10,22 @@ RE_REPLACED_TAG = re.compile(
     ur'(<(script|textarea|style|pre).*?>.*?</(script|textarea|style|pre)>)', re.S
 )
 RE_COMMENTS = re.compile(ur'<!--(?!\[if.*?\]).*?-->', re.S | re.I)
+RE_PLACEHOLDER = re.compile(
+    ur'%s' % PLACEHOLDER.replace('%s', '([0-9]+)')
+)
 
 
 def minify(content, remove_comments=True):
     # helpers
     def tag_replace(m):
-        key = PLACEHOLDER % m.start()
-        safe_storage[key] = m.group(1)
-        return key
+        safe_storage[ m.start()] = m.group(1)
+        return PLACEHOLDER %  m.start()
+
+    def tag_return(m):
+        return safe_storage[int(m.group(1))]
 
     # decode unicode
-    try:
-        content = content.decode('utf-8')
-    except (UnicodeDecodeError, UnicodeEncodeError):
-        pass
+    content = content.decode('UTF-8', 'strict')
 
     # replace dangerous tags with placeholders
     safe_storage = dict()
@@ -37,7 +39,4 @@ def minify(content, remove_comments=True):
         content = RE_COMMENTS.sub('', content)
 
     # and return dangerous tags back
-    for key, value in safe_storage.items():
-        content = content.replace(key, value)
-
-    return content
+    return RE_PLACEHOLDER.sub(tag_return, content).strip()
