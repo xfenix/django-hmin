@@ -19,9 +19,6 @@ def minify(content, remove_comments=True):
         safe_storage[key] = m.group(1)
         return key
 
-    def tag_return(m):
-        return safe_storage[int(m.group(1))]
-
     # decode unicode
     try:
         content = content.decode('utf-8')
