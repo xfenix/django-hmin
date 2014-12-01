@@ -1,19 +1,22 @@
 # -*- coding: utf-8 -*-
+import os
 from setuptools import setup, find_packages
 from hmin import __version__
 
 
-readme = 'README.md'
+readme = open(
+    os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), 'README.md'
+    )
+).read()
 
+
+# hello, pypi
 try:
     import pypandoc
-    read = lambda: pypandoc.convert(readme, 'rst')
+    readme = pypandoc.convert(readme, 'rst', format='md')
 except:
-    readme = open(
-        os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), readme
-        )
-    ).read()
+    pass
 
 
 setup(
