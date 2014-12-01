@@ -10,16 +10,14 @@ RE_REPLACED_TAG = re.compile(
     ur'(<(script|textarea|style|pre).*?>.*?</(script|textarea|style|pre)>)', re.S
 )
 RE_COMMENTS = re.compile(ur'<!--(?!\[if.*?\]).*?-->', re.S | re.I)
-RE_PLACEHOLDER = re.compile(
-    ur'%s' % PLACEHOLDER.replace('%s', '([0-9]+)')
-)
 
 
 def minify(content, remove_comments=True):
     # helpers
     def tag_replace(m):
-        safe_storage[m.start()] = m.group(1)
-        return PLACEHOLDER % m.start()
+        key = PLACEHOLDER % m.start()
+        safe_storage[key] = m.group(1)
+        return key
 
     def tag_return(m):
         return safe_storage[int(m.group(1))]
@@ -42,4 +40,9 @@ def minify(content, remove_comments=True):
         content = RE_COMMENTS.sub('', content)
 
     # and return dangerous tags back
-    return RE_PLACEHOLDER.sub(tag_return, content).strip()
+    for key, value in safe_storage.items():
+        content.replace(key, value)
+
+    return content
+    #return content
+    # return RE_PLACEHOLDER.sub(tag_return, content).strip()
