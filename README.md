@@ -14,6 +14,11 @@ For install django-hmin, run on terminal:
     $ pip install django-hmin
 
 
+Extra install options
+==========
+If you want extraspeed, you can install `re2` (very fast regular expressions) library (`pip install re2` + reqs). Hmin will use it instead of `re`.
+
+
 Using the midleware
 ===================
 

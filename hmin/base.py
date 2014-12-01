@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-import re
+try:
+    import re2 as re
+except ImportError:
+    import re
 
 
 PLACEHOLDER = '<@!hmin_placeholder_%s_lol_!@>'
