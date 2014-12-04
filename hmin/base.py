@@ -25,7 +25,10 @@ def minify(content, remove_comments=True):
         return safe_storage[int(m.group(1))]
 
     # decode unicode
-    content = content.decode('UTF-8', 'strict')
+    try:
+        content = content.decode('utf8')
+    except (UnicodeDecodeError, UnicodeEncodeError):
+        pass
 
     # replace dangerous tags with placeholders
     safe_storage = dict()
