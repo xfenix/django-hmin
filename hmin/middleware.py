@@ -38,5 +38,5 @@ class MinMiddleware(object):
 
         if 'Content-Type' in response and\
            'text/html' in response['Content-Type'] and ENABLED:
-            response.content = minify(response.content, REMOVE_COMMENTS)
+            response.content = minify(response.content)
         return response

@@ -4,5 +4,5 @@ pushd build
     cmake ..
     make
     echo '-----------------'
-    python base.py
+    python _dev.py
 popd
