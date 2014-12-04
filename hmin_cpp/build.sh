@@ -1,8 +1,7 @@
-rm -rf build/
 mkdir build
 pushd build
     cmake ..
     make
-    echo '-----------------'
-    python base.py
+    mv base.so ../base.so
 popd
+rm -rf build/
