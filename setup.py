@@ -29,10 +29,11 @@ except:
 class InstallWrapper(install):
     def run(self):
         install.run(self)
-        path = os.path.join(
-            os.path.dirname(self.get_outputs()[0]), 'hmin_cpp', 'build.sh'
+        mod_path = os.path.dirname(self.get_outputs()[0])
+        cpp_path = os.path.join(
+            os.getcwd(), 'hmin_cpp', 'build.sh'
         )
-        subprocess.call(['ls'])
+        subprocess.call('.' + cpp_path)
 
 
 setup(
