@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
+import subprocess
 from setuptools import setup, find_packages
+from setuptools.command.install import install
 from hmin import __version__
 
 
+# readme
 descr = 'HTML minification function, django middleware, decorator'
 
 try:
@@ -22,6 +25,16 @@ except:
     pass
 
 
+# post install
+class InstallWrapper(install):
+    def run(self):
+        install.run(self)
+        path = os.path.join(
+            os.path.dirname(self.get_outputs()[0]), 'hmin_cpp', 'build.sh'
+        )
+        # subprocess.call(['.' + path])
+
+
 setup(
     name='django-hmin',
     version=__version__,
@@ -32,4 +45,5 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[],
+    cmdclass={'install': InstallWrapper}
 )

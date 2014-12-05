@@ -1,1 +1,1 @@
-include hmin/base.so
+include hmin_cpp/*

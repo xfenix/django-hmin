@@ -1,12 +1,12 @@
-#include <boost/regex.hpp>
 #include <boost/python.hpp>
+#include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
 
 
 using namespace std;
 using namespace boost::algorithm;
 
-// dict type 
+// dict type
 typedef map<string, string> dict;
 
 // simple placeholder
@@ -14,13 +14,15 @@ string placeholder = "<@!hmin_placeholder_%s_!@>";
 // tags container
 dict tag_holder;
 // build regexes
-boost::regex multispace("\\s{2,}");
 boost::regex re_placeholder(
     replace_all_copy(placeholder, "%s", "([0-9]+)")
 );
 boost::regex re_danger_tags(
     "(<(script|textarea|style|pre).*?>.*?</(script|textarea|style|pre)>)"
 );
+boost::regex re_comments("<!--(?!\\[if.*?\\]).*?-->");
+boost::regex re_multispace("\\s{2,}");
+
 
 // helper functions
 string tag_replace(boost::smatch const &what) {
@@ -33,8 +35,9 @@ string tag_return(boost::smatch const &what) {
     return tag_holder[what[1]];
 }
 
+
 // minification
-string minify(string content)
+string minify(string content, bool remove_comments=true)
 {
     // replace danger tags
     string clear_content = boost::regex_replace(
@@ -42,10 +45,14 @@ string minify(string content)
     );
 
     // clear
-    clear_content = boost::regex_replace(clear_content, multispace, " ");
+    clear_content = boost::regex_replace(clear_content, re_multispace, " ");
     replace_all(clear_content, "\n", "");
     replace_all(clear_content, "> <", "><");
     trim(clear_content);
+    // clear comments
+    if(remove_comments) {
+        boost::regex_replace(clear_content, re_comments, " ");
+    }
 
     // return tags back
     clear_content = boost::regex_replace(

@@ -2,6 +2,6 @@ mkdir build
 pushd build
     cmake ..
     make
-    mv base.so ../base.so
+    mv base.so ../../hmin/
 popd
 rm -rf build/
