@@ -32,7 +32,7 @@ class InstallWrapper(install):
         path = os.path.join(
             os.path.dirname(self.get_outputs()[0]), 'hmin_cpp', 'build.sh'
         )
-        # subprocess.call(['.' + path])
+        subprocess.call(['ls'])
 
 
 setup(
