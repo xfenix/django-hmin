@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-import subprocess
+from subprocess import call
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 from hmin import __version__
@@ -25,15 +25,13 @@ except:
     pass
 
 
-# post install
+# post install hook
 class InstallWrapper(install):
     def run(self):
         install.run(self)
         mod_path = os.path.dirname(self.get_outputs()[0])
-        cpp_path = os.path.join(
-            os.getcwd(), 'hmin_cpp', 'build.sh'
-        )
-        subprocess.call('.' + cpp_path)
+        os.chdir(os.path.join(os.getcwd(), 'hmin_cpp'))
+        print call(['sh', 'build.sh'])
 
 
 setup(

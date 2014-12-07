@@ -4,4 +4,4 @@ pushd build
     make
     mv base.so ../../hmin/
 popd
-rm -rf build/
+#rm -rf build/
