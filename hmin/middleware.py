@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
+import os
 from django.conf import settings
 
-try:
-    from .base import minify
-except ImportError:
-    from .base2 import minify
+# try:
+#     from .base import minify
+# except ImportError:
+#     from .base2 import minify
+
+# hello, dirty hack
+old_folder = os.getcwd()
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+from jnius import autoclass
+os.chdir(old_folder)
 
 
 """ Minification html middleware
@@ -12,6 +19,10 @@ except ImportError:
 ENABLED = getattr(settings, 'HTML_MINIFY', not settings.DEBUG)
 REMOVE_COMMENTS = getattr(settings, 'HMIN_REMOVE_COMMENTS', True)
 EXCLUDE = []
+
+# get minifier
+minify = autoclass('Minify')
+java_remove_comments = autoclass('java.lang.Boolean')(REMOVE_COMMENTS)
 
 
 if hasattr(settings, 'HMIN_EXCLUDE'):
@@ -41,5 +52,5 @@ class MinMiddleware(object):
 
         if 'Content-Type' in response and\
            'text/html' in response['Content-Type'] and ENABLED:
-            response.content = minify(response.content)
+            pass#response.content = minify.compress(response.content)
         return response

@@ -1,1 +1,2 @@
 include hmin_cpp/*
+include hmin/Minify.class
