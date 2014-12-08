@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 
-SET(CMAKE_CXX_FLAGS "-lvc++")
-
 FIND_PACKAGE(PythonInterp)
 FIND_PACKAGE(PythonLibs)
 FIND_PACKAGE(Boost COMPONENTS python regex REQUIRED)

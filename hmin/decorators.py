@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 from functools import wraps
 
-try:
-    from .base import minify
-except ImportError:
-    from .base2 import minify
+from .base import minify
 
 
 def minify_plain(remove_comments=True):
