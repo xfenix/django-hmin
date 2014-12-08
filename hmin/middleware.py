@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import os
 from django.conf import settings
+from django.core.cache import caches, InvalidCacheBackendError
+import xxhash
 
 from .base import minify
 
@@ -9,8 +10,14 @@ from .base import minify
 """
 ENABLED = getattr(settings, 'HTML_MINIFY', not settings.DEBUG)
 REMOVE_COMMENTS = getattr(settings, 'HMIN_REMOVE_COMMENTS', True)
+USE_CACHE = getattr(settings, 'HMIN_USE_CACHE', True)
+TIMEOUT = getattr(settings, 'HMIN_CACHE_TIMEOUT', 60*60)
 EXCLUDE = []
 
+try:
+    cache = caches[getattr(settings, 'HMIN_CACHE_BACKEND', 'default')]
+except InvalidCacheBackendError:
+    USE_CACHE = False
 
 if hasattr(settings, 'HMIN_EXCLUDE'):
     for url_pattern in settings.HMIN_EXCLUDE:
@@ -38,6 +45,15 @@ class MinMiddleware(object):
                     return response
 
         if 'Content-Type' in response and\
-           'text/html' in response['Content-Type'] and ENABLED:
-            response.content = minify(response.content, REMOVE_COMMENTS)
+                'text/html' in response['Content-Type'] and ENABLED:
+            if USE_CACHE:
+                key = 'hmin_%s' % xxhash.xxh64(response.content).hexdigest()
+                data = cache.get(key)
+                if data:
+                    response.content = data
+                else:
+                    response.content = minify(response.content, REMOVE_COMMENTS)
+                    cache.set(key, response.content, TIMEOUT)
+            else:
+                response.content = minify(response.content, REMOVE_COMMENTS)
         return response

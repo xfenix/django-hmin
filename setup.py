@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from subprocess import call
 from setuptools import setup, find_packages
-from setuptools.command.install import install
 from hmin import __version__
 
 
@@ -34,5 +32,7 @@ setup(
     author_email='ad@xfenix.ru',
     packages=find_packages(),
     include_package_data=True,
-    install_requires=[]
+    install_requires=[
+        'xxhash',
+    ]
 )
