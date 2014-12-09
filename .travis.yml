@@ -1,0 +1,12 @@
+language: python
+python: 2.7
+before_install:
+  - sudo apt-get update
+install:
+  - pip install xxhash tox coveralls coverage
+script:
+  - tox
+env:
+  - TOXENV=base
+#  - TOXENV=coverage
+# after_success: coveralls
