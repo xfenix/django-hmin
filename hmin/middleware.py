@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.core.cache import caches, InvalidCacheBackendError
+try:
+    from django.core.cache import caches, InvalidCacheBackendError
+except ImportError:
+    from django.core.cache import get_cache, InvalidCacheBackendError
 try:
     import xxhash
 except ImportError:
@@ -25,10 +28,15 @@ except NameError:
     hash_func = hashlib.md5
 
 # get cache provider, or disable caching
+cache_back = getattr(settings, 'HMIN_CACHE_BACKEND', 'default')
 try:
-    cache = caches[getattr(settings, 'HMIN_CACHE_BACKEND', 'default')]
+    try:
+        cache = caches[cache_back]
+    except NameError:
+        cache = get_cache(cache_back)
 except InvalidCacheBackendError:
     USE_CACHE = False
+
 
 # process exclude pages
 if hasattr(settings, 'HMIN_EXCLUDE'):
