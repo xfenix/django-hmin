@@ -129,7 +129,6 @@ Minus overhead, plain time: hmin - **140ms** (**7ms** with cache), htmlmin - ok.
 Current problems
 ===================
 - Doesnt respect CDATA
-- Doesnt have tests
 
 License
 ===================
