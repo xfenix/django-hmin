@@ -2,8 +2,9 @@ django-hmin
 ===========
 
 Django (1.7+) HTML minification middleware (another one).
-Key feature - speed. 10x (on large html's it can be 200x or even more) time faster, than htmlmin.
+Key feature - speed. 10x (on large html's it can be 50x, 100x, 200x or even more) time faster, than htmlmin.
 Compress html, removes comments, respects (dont remove) conditional comments (IE) by default.
+Uses cache (can be disabled), that greatly reduce html  minification overhead.
 
 
 Installing
@@ -13,10 +14,8 @@ For install django-hmin, run on terminal:
 
     $ pip install django-hmin
 
-
-Extra install options
-==========
-If you want extraspeed, you can install `re2` (very fast regular expressions) library (`pip install re2` + reqs). Hmin will use it instead of `re`.
+##### Extra install options
+Optionally, you can install `re2` (fast regular expressions) library (`pip install re2` + reqs). Hmin will use it instead of `re`.
 
 
 Using the midleware
@@ -64,21 +63,22 @@ Specify settings:
 
 ##### Cache
 
-By default hmin middleware uses cache (fastest minification is no minification).
+By default hmin middleware uses cache (very useful for small and middle web sites, and for big you definitely will use ngx_pagespeed or other "big" solutions).
 You can disable it by specify setting:
 
     HMIN_USE_CACHE = False
 
-Also you can change time and cache backend (if you want, by default time is 60*60, cache backend - "default"):
+Also you can change time and cache backend (if you want, by default time is 3600, cache backend - "default"):
 
-
+    HMIN_CACHE_TIMEOUT = 86400
+    HMIN_CACHE_BACKEND = 'my_cache'
 
 
 Using the function
 ===================
 
 Just import function minify: `from hmin import minify`, than  you can use it with any html you want.
-Definition of minify function: `def minify(content, remove_comments=True)`
+Function definition: `def minify(content, remove_comments=True)`
 
 
 Using the decorator
@@ -99,7 +99,7 @@ Or, if you want to keep html comments:
         return some_plain_html
 
 
-About speed
+Stupid speed benchmark (1)
 ==========
 I try to compress 1mb of html (i think, your usual html is slightly thiner) on my i7 laptop processor and measure time with django-debug-toolbar.
 
@@ -113,6 +113,23 @@ Minus overhead, plain time: hmin - **20ms**, htmlmin - **1160ms**.
 
 Probably, you can get other numbers. But hmin really faster than  htmlmin.
 
+
+Stupid speed benchmark (2)
+==========
+Also i try to compress 2mb of html on my desktop i3 (sandy bridge).
+
+Debug toolbar time:
+- with hmin cpu was about **220ms** without cache, and **87ms** with cache
+- with htmlmin cpu was about **125000ms**
+
+Django overhead was about **80ms**.
+Minus overhead, plain time: hmin - **140ms** (**7ms** with cache), htmlmin - ok.
+
+
+Current problems
+===================
+- Doesnt respect CDATA
+- Doesnt have tests
 
 License
 ===================

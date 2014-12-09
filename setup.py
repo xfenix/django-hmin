@@ -5,7 +5,7 @@ from hmin import __version__
 
 
 # readme
-descr = 'HTML minification function, django middleware, decorator'
+descr = 'Fast HTML minification function, django middleware, decorator'
 
 try:
     readme = open(

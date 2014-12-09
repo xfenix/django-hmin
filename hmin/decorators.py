@@ -19,3 +19,20 @@ def minify_plain(remove_comments=True):
             return  minify(func(*args, **kwargs), remove_comments)
         return wrapper
     return compress
+
+
+def minify_disable(func):
+    """ Disable page minification
+
+    Usage:
+        @minify_disable
+        def my_cool_func():
+            <...>
+            return some_plain_html
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        response = func(*args, **kwargs)
+        response.need_to_minify = False
+        return response
+    return wrapper
