@@ -8,5 +8,5 @@ script:
   - tox
 env:
   - TOXENV=base
-#  - TOXENV=coverage
+  - TOXENV=coverage
 # after_success: coveralls
