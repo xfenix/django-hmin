@@ -6,8 +6,10 @@ except ImportError:
     from django.core.cache import get_cache, InvalidCacheBackendError
 try:
     import xxhash
+    hash_func = xxhash.xxh64
 except ImportError:
     import hashlib
+    hash_func = hashlib.md5
 
 from .base import minify
 
@@ -19,13 +21,6 @@ REMOVE_COMMENTS = getattr(settings, 'HMIN_REMOVE_COMMENTS', True)
 USE_CACHE = getattr(settings, 'HMIN_USE_CACHE', True)
 TIMEOUT = getattr(settings, 'HMIN_CACHE_TIMEOUT', 3600)
 EXCLUDE = []
-
-# graceful degradation to hashlib
-# (in case if xxhash has some instalation troubles)
-try:
-    hash_func = xxhash.xxh64
-except NameError:
-    hash_func = hashlib.md5
 
 # get cache provider, or disable caching
 cache_back = getattr(settings, 'HMIN_CACHE_BACKEND', 'default')
