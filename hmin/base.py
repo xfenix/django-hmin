@@ -19,7 +19,7 @@ RE_PLACEHOLDER = re.compile(
 def minify(content, remove_comments=True):
     # helpers
     def tag_replace(m):
-        safe_storage[ m.start()] = m.group(1)
+        safe_storage[m.start()] = m.group(1)
         return PLACEHOLDER %  m.start()
 
     def tag_return(m):
