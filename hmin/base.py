@@ -7,12 +7,12 @@ except ImportError:
 flags = re.S | re.I
 PLACEHOLDER = '<@!hmin_placeholder_%s_!@>'
 RE_REPLACED_TAG = re.compile(
-    ur'(<(script|textarea|style|pre).*?>.*?</(script|textarea|style|pre)>)',
+    r'(<(script|textarea|style|pre).*?>.*?</(script|textarea|style|pre)>)',
     flags
 )
-RE_COMMENTS = re.compile(ur'<!--(?!\[if.*?\]).*?-->', flags)
+RE_COMMENTS = re.compile(r'<!--(?!\[if.*?\]).*?-->', flags)
 RE_PLACEHOLDER = re.compile(
-    ur'%s' % PLACEHOLDER.replace('%s', '([0-9]+)')
+    r'%s' % PLACEHOLDER.replace('%s', '([0-9]+)')
 )
 
 
