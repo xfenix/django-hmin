@@ -10,6 +10,10 @@ try:
 except ImportError:
     import hashlib
     hash_func = hashlib.md5
+try:
+    import re2 as re
+except ImportError:
+    import re
 
 from .base import minify
 
