@@ -9,9 +9,9 @@ Compress html, removes comments, respects (dont remove) conditional comments (IE
 Uses cache (can be disabled), that greatly reduce html  minification overhead.
 
 
-Installing
+Compability
 ==========
-Compabiliy: Django 1.6 - Django 1.10
+Django 1.6 - Django 1.10
 
 
 Installing
