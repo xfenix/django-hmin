@@ -25,6 +25,7 @@ except:
 
 setup(
     name='django-hmin',
+    url='https://github.com/xfenix/django-hmin',
     version=__version__,
     description=descr,
     long_description=readme,
