@@ -14,7 +14,12 @@ try:
     import re2 as re
 except ImportError:
     import re
-
+try:
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:
+    # Not required for Django <= 1.9, see:
+    # https://docs.djangoproject.com/en/1.10/topics/http/middleware/#upgrading-pre-django-1-10-style-middleware
+    MiddlewareMixin = object
 from .base import minify
 
 
@@ -44,12 +49,12 @@ if hasattr(settings, 'HMIN_EXCLUDE'):
         EXCLUDE.append(regex)
 
 
-class MarkMiddleware(object):
+class MarkMiddleware(MiddlewareMixin):
     def process_request(self, request):
         request.need_to_minify = True
 
 
-class MinMiddleware(object):
+class MinMiddleware(MiddlewareMixin):
     def process_response(self, request, response):
         # prevent from minifying cached pages
         if not hasattr(request, 'need_to_minify') or\
