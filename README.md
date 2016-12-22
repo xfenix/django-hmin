@@ -11,6 +11,11 @@ Uses cache (can be disabled), that greatly reduce html  minification overhead.
 
 Installing
 ==========
+Compabiliy: Django 1.6 - Django 1.10
+
+
+Installing
+==========
 
 For install django-hmin, run on terminal:
 
