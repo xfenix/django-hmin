@@ -7,6 +7,8 @@ install:
 script:
   - tox
 env:
-  - TOXENV=base
+  - TOXENV=base16
+  - TOXENV=base19
+  - TOXENV=base110
 after_success:
     - coveralls
