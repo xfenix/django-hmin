@@ -2,7 +2,7 @@ django-hmin
 ===========
 
 [![Build Status](https://travis-ci.org/xfenix/django-hmin.svg?branch=master)](https://travis-ci.org/xfenix/django-hmin)
-[![PyPI version](https://badge.fury.io/py/django-metro.svg)](https://badge.fury.io/py/django-metro)
+[![PyPI version](https://badge.fury.io/py/django-hmin.svg)](https://badge.fury.io/py/django-hmin)
 
 Django (1.6+) HTML minification middleware (another one).
 Key feature - speed. 10x (on large html's it can be 50x, 100x, 200x or even more) time faster, than htmlmin.
