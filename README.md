@@ -6,8 +6,8 @@ django-hmin
 
 Django (1.6+) HTML minification middleware (another one).
 Key feature - speed. 10x (on large html's it can be 50x, 100x, 200x or even more) time faster, than htmlmin.
-Compress html, removes comments, respects (dont remove) conditional comments (IE) by default.
-Uses cache (can be disabled), that greatly reduce html  minification overhead.
+Compress html code and removes html comments, but ignores conditional comments (IE) by default.
+Uses cache by default (can be disabled), so minification overhead is greatly reduced.
 
 
 Compatibility
