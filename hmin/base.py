@@ -5,11 +5,11 @@ try:
 except ImportError:
     import re
 
+
 flags = re.S | re.I
 PLACEHOLDER = '<@!hmin_placeholder_%s_!@>'
 RE_REPLACED_TAG = re.compile(
-    r'(<(script|textarea|style|pre).*?>.*?</(script|textarea|style|pre)>)',
-    flags
+    r'(<(script|textarea|style|pre).*?>.*?</(script|textarea|style|pre)>)', flags
 )
 RE_COMMENTS = re.compile(r'<!--(?!\[if.*?\]).*?-->', flags)
 RE_PLACEHOLDER = re.compile(

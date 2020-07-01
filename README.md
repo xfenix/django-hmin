@@ -3,7 +3,7 @@ django-hmin
 
 [![Build Status](https://travis-ci.org/xfenix/django-hmin.svg?branch=master)](https://travis-ci.org/xfenix/django-hmin)
 [![PyPI version](https://badge.fury.io/py/django-hmin.svg)](https://badge.fury.io/py/django-hmin)
-[![Coverage Status](https://coveralls.io/repos/github/xfenix/django-hmin/badge.svg)](https://coveralls.io/github/xfenix/django-hmin)
+[![codecov](https://codecov.io/gh/xfenix/django-hmin/branch/master/graph/badge.svg)](https://codecov.io/gh/xfenix/django-hmin)
 
 Django (1.6+) HTML minification middleware (another one).
 Key feature - speed. 10x (on large html's it can be 50x, 100x, 200x or even more) time faster, than htmlmin.
@@ -13,7 +13,7 @@ Uses cache by default (can be disabled), so minification overhead is greatly red
 
 Compatibility
 ==========
-Django 1.6 - Django 1.10
+Django 1.6 — Django 1.10
 
 
 Installing
@@ -135,10 +135,6 @@ Django overhead was about **80ms**.
 Minus overhead, plain time: hmin - **140ms** (**7ms** with cache), htmlmin - ok.
 
 
-Current problems
+Current possible problems
 ===================
 - Doesnt respect CDATA
-
-License
-===================
-Who cares? Use it whatever you want.

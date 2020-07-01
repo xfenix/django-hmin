@@ -14,7 +14,7 @@ load_file = lambda name: codecs.open(
 
 
 class MinifyTestCase(SimpleTestCase):
-    def test_data_htmls(self):
+    def test_with_fixture_data(self):
         examples = [
             'habrahabr',
             'lenta',
@@ -22,7 +22,7 @@ class MinifyTestCase(SimpleTestCase):
             'youtube',
         ]
         for example in examples:
-            print 'Test file %s' % example
+            print('Test file %s' % example)
             self.assertEqual(
                 minify(load_file(example)), load_file(example + '_min')
             )
