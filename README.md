@@ -1,7 +1,7 @@
 django-hmin
 ===========
 
-[![Build Status](https://travis-ci.org/xfenix/django-hmin.svg?branch=master)](https://travis-ci.org/xfenix/django-hmin)
+![Python package](https://github.com/xfenix/django-hmin/workflows/Python%20package/badge.svg)
 [![PyPI version](https://badge.fury.io/py/django-hmin.svg)](https://badge.fury.io/py/django-hmin)
 [![codecov](https://codecov.io/gh/xfenix/django-hmin/branch/master/graph/badge.svg)](https://codecov.io/gh/xfenix/django-hmin)
 
