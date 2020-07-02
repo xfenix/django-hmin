@@ -11,6 +11,7 @@ mypy = "*"
 pytest = "*"
 pytest-cov = "*"
 flit = "*"
+pytest-django = "*"
 
 [requires]
 python_version = "3"
