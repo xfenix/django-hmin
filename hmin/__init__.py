@@ -1,4 +1,6 @@
-# hi
+"""Entrypoint and version.
+"""
 from .base import minify
 
-__version__='0.3.3'
+
+__version__: str = "0.3.3"

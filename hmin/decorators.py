@@ -1,11 +1,14 @@
-# -*- coding: utf-8 -*-
+"""Decorators module.
+"""
+from __future__ import annotations
+import typing
 from functools import wraps
 
 from .base import minify
 
 
-def minify_plain(remove_comments=True):
-    """ Minifies any function output
+def minify_plain(remove_comments: bool = True) -> typing.Callable:
+    """Minifies any function output.
 
     Usage:
         @minify_plain()
@@ -13,16 +16,19 @@ def minify_plain(remove_comments=True):
             <...>
             return some_plain_html
     """
-    def compress(func):
+
+    def compress(func: typing.Callable) -> typing.Callable:
         @wraps(func)
-        def wrapper(*args, **kwargs):
-            return  minify(func(*args, **kwargs), remove_comments)
+        def wrapper(*args: tuple, **kwargs: dict) -> typing.Any:
+            return minify(func(*args, **kwargs), remove_comments)
+
         return wrapper
+
     return compress
 
 
-def minify_disable(func):
-    """ Disable page minification
+def minify_disable(func: typing.Callable) -> typing.Callable:
+    """Disable page minification (restricted for django).
 
     Usage:
         @minify_disable
@@ -30,9 +36,11 @@ def minify_disable(func):
             <...>
             return some_plain_html
     """
+
     @wraps(func)
-    def wrapper(*args, **kwargs):
-        response = func(*args, **kwargs)
+    def wrapper(*args: tuple, **kwargs: dict) -> typing.Any:
+        response: typing.Any = func(*args, **kwargs)
         response.need_to_minify = False
         return response
+
     return wrapper

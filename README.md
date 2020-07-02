@@ -13,7 +13,8 @@ Uses cache by default (can be disabled), so minification overhead is greatly red
 
 Compatibility
 ==========
-Django 1.6 — Django 1.10
+Python 3.7+
+Django 2.0+
 
 
 Installing

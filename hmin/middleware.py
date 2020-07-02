@@ -1,77 +1,88 @@
-# -*- coding: utf-8 -*-
+"""Django middleware.
+"""
+from __future__ import annotations
+import typing
+import logging
+
 from django.conf import settings
-try:
-    from django.core.cache import caches, InvalidCacheBackendError
-except ImportError:
-    from django.core.cache import get_cache, InvalidCacheBackendError
+from django.core.caches.backends.base import BaseCache
+from django.core.cache import caches, InvalidCacheBackendError
+
+hash_func: typing.Callable
 try:
     import xxhash
+
     hash_func = xxhash.xxh64
 except ImportError:
     import hashlib
+
     hash_func = hashlib.md5
 try:
     import re2 as re
 except ImportError:
     import re
+
 from .base import minify
 
 
-""" Minification html middleware
-"""
-ENABLED = getattr(settings, 'HTML_MINIFY', not settings.DEBUG)
-REMOVE_COMMENTS = getattr(settings, 'HMIN_REMOVE_COMMENTS', True)
-USE_CACHE = getattr(settings, 'HMIN_USE_CACHE', True)
-TIMEOUT = getattr(settings, 'HMIN_CACHE_TIMEOUT', 3600)
-EXCLUDE = []
+LOGGER_INST: logging.Logger = logging.getLogger(__file__)
+MINIFICATION_ENABLED: bool = getattr(settings, "HTML_MINIFY", not settings.DEBUG)
+REMOVE_COMMENTS: bool = getattr(settings, "HMIN_REMOVE_COMMENTS", True)
+USE_CACHE: bool = getattr(settings, "HMIN_USE_CACHE", True)
+TIMEOUT: bool = getattr(settings, "HMIN_CACHE_TIMEOUT", 3600)
+EXCLUDE_PAGES: list = []
+
 
 # get cache provider, or disable caching
-cache_back = getattr(settings, 'HMIN_CACHE_BACKEND', 'default')
 try:
-    try:
-        cache = caches[cache_back]
-    except NameError:
-        cache = get_cache(cache_back)
-except InvalidCacheBackendError:
+    cache_instance: BaseCache = caches[getattr(settings, "HMIN_CACHE_BACKEND", "default")]
+except (InvalidCacheBackendError, NameError):
     USE_CACHE = False
 
 
 # process exclude pages
-if hasattr(settings, 'HMIN_EXCLUDE'):
-    for url_pattern in settings.HMIN_EXCLUDE:
-        regex = re.compile(url_pattern)
-        EXCLUDE.append(regex)
+if hasattr(settings, "HMIN_EXCLUDE"):
+    EXCLUDE_PAGES = [re.compile(url_pattern) for url_pattern in settings.HMIN_EXCLUDE]
 
 
+# Middlewares starts here
 class MarkMiddleware:
+    """This middleware suposed to be first. It mean to be used with cache middlewares in django.
+    """
+
     def process_request(self, request):
+        """Allow minification flag.
+        """
         request.need_to_minify = True
 
 
 class MinMiddleware:
+    """Minification middleware itself.
+    """
+
     def process_response(self, request, response):
+        """Minification goes here.
+        """
         # prevent from minifying cached pages
-        if not hasattr(request, 'need_to_minify') or\
-           not request.need_to_minify:
+        if not hasattr(request, "need_to_minify") or not request.need_to_minify:
             return response
 
         # prevent from minifying excluded pages
-        if EXCLUDE:
-            path = request.path.lstrip('/')
-            for regex in EXCLUDE:
-                if regex.match(path):
+        if EXCLUDE_PAGES:
+            current_path: str = request.path.lstrip("/")
+            for one_regex in EXCLUDE_PAGES:
+                if one_regex.match(current_path):
                     return response
 
-        if 'Content-Type' in response and\
-                'text/html' in response['Content-Type'] and ENABLED:
+        if "Content-Type" in response and "text/html" in response["Content-Type"] and MINIFICATION_ENABLED:
             if USE_CACHE:
-                key = 'hmin_%s' % hash_func(response.content).hexdigest()
-                data = cache.get(key)
-                if data:
-                    response.content = data
+                cache_key: str = "hmin_%s" % hash_func(response.content).hexdigest()
+                cached_page: typing.Optional[str] = cache_instance.get(cache_key)
+                if cached_page:
+                    response.content = cached_page
                 else:
                     response.content = minify(response.content, REMOVE_COMMENTS)
-                    cache.set(key, response.content, TIMEOUT)
+                    cache_instance.set(cache_key, response.content, TIMEOUT)
             else:
                 response.content = minify(response.content, REMOVE_COMMENTS)
         return response
