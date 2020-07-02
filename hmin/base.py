@@ -32,13 +32,6 @@ def minify(data_input: str, remove_comments=True) -> str:
     def return_excluded_tags(match: re.Match) -> str:
         return safe_storage[int(match.group(1))]
 
-    # decode unicode
-    try:
-        data_input = data_input.decode("utf8")
-    except (UnicodeDecodeError, UnicodeEncodeError):
-        LOGGER_INST.error(f"Cant decode input {data_input}")
-        return data_input
-
     # replace dangerous tags with placeholders
     data_input = RE_REPLACED_TAG.sub(store_excluded_tags, data_input)
     # fast version of "\s{2,} to \s"

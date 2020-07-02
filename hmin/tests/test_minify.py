@@ -1,28 +1,36 @@
-# -*- coding: utf-8 -*-
+"""All tests here.
+"""
 import codecs
-from os.path import abspath, dirname, join
+import pathlib
+
 from django.test import SimpleTestCase
 from django.test.utils import override_settings
 
 from hmin import minify
 
 
-data_path = abspath(join(dirname(__file__), 'data'))
-load_file = lambda name: codecs.open(
-    '%s.html' % join(data_path, name), encoding='utf-8'
-).read()
+DATA_PATH: pathlib.Path = pathlib.Path(__file__).parent.resolve().joinpath("data")
+
+
+def load_fixture_file(file_name: str) -> str:
+    """Test helper fn.
+    """
+    return codecs.open("%s.html" % DATA_PATH.joinpath(file_name), encoding="utf-8").read()
 
 
 class MinifyTestCase(SimpleTestCase):
+    """Basic test case.
+    """
+
     def test_with_fixture_data(self):
+        """Fixture based test.
+        """
         examples = [
-            'habrahabr',
-            'lenta',
-            'gazeta',
-            'youtube',
+            "habrahabr",
+            "lenta",
+            "gazeta",
+            "youtube",
         ]
-        for example in examples:
-            print('Test file %s' % example)
-            self.assertEqual(
-                minify(load_file(example)), load_file(example + '_min')
-            )
+        for one_example in examples:
+            print("Test file %s" % one_example)
+            self.assertEqual(minify(load_fixture_file(one_example)), load_fixture_file(one_example + "_min"))
