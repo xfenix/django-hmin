@@ -6,24 +6,23 @@ import pathlib
 
 import pytest
 
-from hmin import minify
-
-
-DATA_PATH: pathlib.Path = pathlib.Path(__file__).parent.resolve().joinpath("data")
-
-
-def load_fixture_file(file_name: str) -> str:
-    """Test helper fn.
-    """
-    return codecs.open("%s.html" % DATA_PATH.joinpath(file_name), encoding="utf-8").read()
+from hmin import decorators
+from hmin.tests.conftest import load_fixture_file
 
 
 @pytest.mark.parametrize("fixture_file_name", ("habrahabr", "lenta", "gazeta", "youtube"))
-def test_with_fixture_data(fixture_file_name: str) -> None:
+def test_plain_minify_decorator_with_fixture(fixture_file_name: str) -> None:
     """Fixture based test.
     """
     print("Test file %s" % fixture_file_name)
-    assert minify(load_fixture_file(fixture_file_name)) == load_fixture_file(fixture_file_name + "_min")
+
+    @decorators.minify_plain()
+    def _example_function():
+        """Example function returns something.
+        """
+        return load_fixture_file(fixture_file_name)
+
+    assert _example_function() == load_fixture_file(fixture_file_name + "_min")
 
 
 @pytest.mark.parametrize(
@@ -51,7 +50,14 @@ def test_with_fixture_data(fixture_file_name: str) -> None:
         ),
     ),
 )
-def test_some_basic_things(example_case: str) -> None:
+def test_plain_minify_decorator(example_case: str) -> None:
     """Very basic tests.
     """
-    assert minify(example_case[0]) == example_case[1]
+
+    @decorators.minify_plain()
+    def _example_function():
+        """Example function returns something.
+        """
+        return example_case[0]
+
+    assert _example_function() == example_case[1]
