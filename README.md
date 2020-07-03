@@ -30,7 +30,7 @@ Using with Django as midleware
 
 All you need to do is add two middlewares to your ``MIDDLEWARE_CLASSES``:
 ```python
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES: tuple = (
     # other middleware classes
     'hmin.middleware.MinMiddleware',
     'hmin.middleware.MarkMiddleware',
@@ -41,7 +41,7 @@ If you're using Django's caching middleware, ``MarkMiddleware``
 should go after ``FetchFromCacheMiddleware``, and ``MinMiddleware``
 should go after ``UpdateCacheMiddleware``:
 ```python
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES: tuple = (
     'django.middleware.cache.UpdateCacheMiddleware',
     'hmin.middleware.MinMiddleware',
     # other middleware classes
@@ -52,7 +52,7 @@ MIDDLEWARE_CLASSES = (
 
 You can optionally specify the ``HTML_MINIFY`` setting:
 ```python
-HTML_MINIFY = True
+HTML_MINIFY: bool = True
 ```
 
 The default value for the ``HTML_MINIFY`` setting is ``not DEBUG``. You only
@@ -62,26 +62,26 @@ is enabled.
 ##### URL exclude
 Specify setting:
 ```python
-HMIN_EXCLUDE = ('^base/', '^admin/')
+HMIN_EXCLUDE:tuple = ('^base/', '^admin/')
 ```
 
 ##### Keep html comments
 Specify settings:
 ```python
-HMIN_REMOVE_COMMENTS = False
+HMIN_REMOVE_COMMENTS: bool = False
 ```
 
 ##### Cache
 By default hmin middleware uses cache (very useful for small and middle web sites, and for big you definitely will use ngx_pagespeed or other "big" solutions).
 You can disable it by specify setting:
 ```python
-HMIN_USE_CACHE = False
+HMIN_USE_CACHE: bool = False
 ```
 
 Also you can change time and cache backend (if you want, by default time is 3600, cache backend - "default"):
 ```python
-HMIN_CACHE_TIMEOUT = 86400
-HMIN_CACHE_BACKEND = 'my_cache'
+HMIN_CACHE_TIMEOUT: int = 86400
+HMIN_CACHE_BACKEND: str = 'my_cache'
 ```
 
 Another using scenarios
@@ -143,4 +143,4 @@ Minus overhead, plain time: hmin - **140ms** (**7ms** with cache), htmlmin - ok.
 
 Current possible problems
 ==
-— Doesnt respect CDATA
+* Doesnt respect CDATA
