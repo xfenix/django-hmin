@@ -62,7 +62,7 @@ is enabled.
 ##### URL exclude
 Specify setting:
 ```python
-HMIN_EXCLUDE:tuple = ('^base/', '^admin/')
+HMIN_EXCLUDE: tuple = ('^base/', '^admin/')
 ```
 
 ##### Keep html comments
