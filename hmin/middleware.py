@@ -1,12 +1,16 @@
 """Django middleware.
 """
 from __future__ import annotations
+import re
 import typing
 import logging
 
 from django.conf import settings
 from django.core.caches.backends.base import BaseCache
 from django.core.cache import caches, InvalidCacheBackendError
+
+from .base import minify
+
 
 hash_func: typing.Callable
 try:
@@ -17,15 +21,10 @@ except ImportError:
     import hashlib
 
     hash_func = hashlib.md5
-try:
-    import re2 as re
-except ImportError:
-    import re
-
-from .base import minify
 
 
 LOGGER_INST: logging.Logger = logging.getLogger(__file__)
+CACHE_PREFIX: str = "hmin-"
 MINIFICATION_ENABLED: bool = getattr(settings, "HTML_MINIFY", not settings.DEBUG)
 REMOVE_COMMENTS: bool = getattr(settings, "HMIN_REMOVE_COMMENTS", True)
 USE_CACHE: bool = getattr(settings, "HMIN_USE_CACHE", True)
@@ -76,7 +75,7 @@ class MinMiddleware:
 
         if "Content-Type" in response and "text/html" in response["Content-Type"] and MINIFICATION_ENABLED:
             if USE_CACHE:
-                cache_key: str = "hmin_%s" % hash_func(response.content).hexdigest()
+                cache_key: str = f"{CACHE_PREFIX}{hash_func(response.content).hexdigest()}"
                 cached_page: typing.Optional[str] = cache_instance.get(cache_key)
                 if cached_page:
                     response.content = cached_page

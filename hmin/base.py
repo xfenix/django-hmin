@@ -1,12 +1,8 @@
 """Core logic module.
 """
 from __future__ import annotations
+import re
 import logging
-
-try:
-    import re2 as re
-except ImportError:
-    import re
 
 
 LOGGER_INST: logging.Logger = logging.getLogger(__file__)
