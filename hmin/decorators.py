@@ -4,7 +4,7 @@ from __future__ import annotations
 import typing
 from functools import wraps
 
-from .base import minify
+from .base import html_minify
 
 
 def minify_plain(remove_comments: bool = True) -> typing.Callable:
@@ -20,7 +20,7 @@ def minify_plain(remove_comments: bool = True) -> typing.Callable:
     def compress(func: typing.Callable) -> typing.Callable:
         @wraps(func)
         def wrapper(*args: tuple, **kwargs: dict) -> typing.Any:
-            return minify(func(*args, **kwargs), remove_comments)
+            return html_minify(func(*args, **kwargs), remove_comments)
 
         return wrapper
 

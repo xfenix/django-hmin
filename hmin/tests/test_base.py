@@ -6,7 +6,7 @@ import pathlib
 
 import pytest
 
-from hmin import minify
+from hmin import html_minify
 from hmin.tests.conftest import load_fixture_file
 
 
@@ -15,7 +15,7 @@ def test_with_fixture_data(fixture_file_name: str) -> None:
     """Fixture based test.
     """
     print("Test file %s" % fixture_file_name)
-    assert minify(load_fixture_file(fixture_file_name)) == load_fixture_file(fixture_file_name + "_min")
+    assert html_minify(load_fixture_file(fixture_file_name)) == load_fixture_file(fixture_file_name + "_min")
 
 
 @pytest.mark.parametrize(
@@ -46,4 +46,4 @@ def test_with_fixture_data(fixture_file_name: str) -> None:
 def test_some_basic_things(example_case: str) -> None:
     """Very basic tests.
     """
-    assert minify(example_case[0]) == example_case[1]
+    assert html_minify(example_case[0]) == example_case[1]

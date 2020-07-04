@@ -9,7 +9,7 @@ from django.conf import settings
 from django.core.caches.backends.base import BaseCache
 from django.core.cache import caches, InvalidCacheBackendError
 
-from .base import minify
+from .base import html_minify
 
 
 hash_func: typing.Callable
@@ -80,8 +80,8 @@ class MinMiddleware:
                 if cached_page:
                     response.content = cached_page
                 else:
-                    response.content = minify(response.content, REMOVE_COMMENTS)
+                    response.content = html_minify(response.content, REMOVE_COMMENTS)
                     cache_instance.set(cache_key, response.content, TIMEOUT)
             else:
-                response.content = minify(response.content, REMOVE_COMMENTS)
+                response.content = html_minify(response.content, REMOVE_COMMENTS)
         return response

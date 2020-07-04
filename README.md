@@ -9,7 +9,8 @@ Django oriented (2.0+) HTML minification middleware (another one).
 Key feature — speed. 10x (on large html's it can be 50x, 100x, 200x or even more) time faster, than htmlmin.  
 Compress html code and removes html comments, but ignores conditional comments (IE) by default.  
 Uses cache by default (can be disabled), so minification overhead is greatly reduced.
-Also it can be used as solo function.
+Also it can be used as solo function.  
+For best expirience use it with https://github.com/django-compressor/django-compressor.
 
 
 Compatibility
@@ -18,7 +19,7 @@ Compatibility
 * Django 2.0+
 
 
-Installing
+Install
 ===
 For install django-hmin, run on terminal:
 ```bash
@@ -107,10 +108,10 @@ def my_cool_func():
 ## Solo
 Just import function minify. Function definition: `def minify(content, remove_comments=True)`. Example:
 ```python
-from hmin import minify
+from hmin import html_minify
 
 
-minify('<div>     hello</div>') # <div>hello</div>
+html_minify('<div>     hello</div>') # <div>hello</div>
 ```
 
 
