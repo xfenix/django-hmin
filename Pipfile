@@ -12,6 +12,7 @@ pytest = "*"
 pytest-cov = "*"
 flit = "*"
 pytest-django = "*"
+importlib-metadata = "*"
 
 [requires]
 python_version = "3"
