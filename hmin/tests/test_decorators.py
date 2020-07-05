@@ -7,22 +7,21 @@ import pathlib
 import pytest
 
 from hmin import decorators
-from hmin.tests.conftest import load_fixture_file
+from hmin.tests import helpers
 
 
-@pytest.mark.parametrize("fixture_file_name", ("habrahabr", "lenta", "gazeta", "youtube"))
-def test_plain_minify_decorator_with_fixture(fixture_file_name: str) -> None:
+@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
+def test_plain_minify_decorator_with_fixture(test_case: dict[str, str]) -> None:
     """Fixture based test.
     """
-    print("Test file %s" % fixture_file_name)
 
     @decorators.minify_plain()
     def _example_function():
         """Example function returns something.
         """
-        return load_fixture_file(fixture_file_name)
+        return test_case["original"]
 
-    assert _example_function() == load_fixture_file(fixture_file_name + "_min")
+    assert _example_function() == test_case["min"]
 
 
 @pytest.mark.parametrize(

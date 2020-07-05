@@ -7,15 +7,14 @@ import pathlib
 import pytest
 
 from hmin import html_minify
-from hmin.tests.conftest import load_fixture_file
+from hmin.tests import helpers
 
 
-@pytest.mark.parametrize("fixture_file_name", ("habrahabr", "lenta", "gazeta", "youtube"))
-def test_with_fixture_data(fixture_file_name: str) -> None:
+@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
+def test_with_fixture_data(test_case: dict[str, str]) -> None:
     """Fixture based test.
     """
-    print("Test file %s" % fixture_file_name)
-    assert html_minify(load_fixture_file(fixture_file_name)) == load_fixture_file(fixture_file_name + "_min")
+    assert html_minify(test_case["original"]) == test_case["min"]
 
 
 @pytest.mark.parametrize(
