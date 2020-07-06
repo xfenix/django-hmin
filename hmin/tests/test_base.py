@@ -14,34 +14,10 @@ from hmin.tests import helpers
 def test_with_fixture_data(test_case: dict[str, str]) -> None:
     """Fixture based test.
     """
-    assert html_minify(test_case["original"]) == test_case["min"]
+    assert html_minify(test_case["original"]) == test_case["min"], "Wrong case"
 
 
-@pytest.mark.parametrize(
-    "example_case",
-    (
-        ("""<div>     """, "<div>"),
-        (
-            """<div>
-
-            <p>
-
-            """,
-            "<div><p>",
-        ),
-        (
-            """<!-- comments by default is removing -->
-
-            yeap
-            <div>
-
-            There is no doubt
-            </div>
-            """,
-            "yeap <div> There is no doubt </div>",
-        ),
-    ),
-)
+@pytest.mark.parametrize("example_case", helpers.TYPICAL_HTML_CASES)
 def test_some_basic_things(example_case: str) -> None:
     """Very basic tests.
     """
