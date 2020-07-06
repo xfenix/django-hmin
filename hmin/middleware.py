@@ -6,7 +6,7 @@ import typing
 import logging
 
 from django.conf import settings
-from django.core.caches.backends.base import BaseCache
+from django.core.cache.backends.base import BaseCache
 from django.core.cache import caches, InvalidCacheBackendError
 
 from .base import html_minify
@@ -59,7 +59,7 @@ class MinMiddleware:
     """Minification middleware itself.
     """
 
-    def process_response(self, request, response):
+    def process_response(self, request: typing.Any, response: typing.Any) -> typing.Any:
         """Minification goes here.
         """
         # prevent from minifying cached pages
