@@ -75,7 +75,7 @@ class MinMiddleware:
 
         if "Content-Type" in response and "text/html" in response["Content-Type"] and MINIFICATION_ENABLED:
             if USE_CACHE:
-                cache_key: str = f"{CACHE_PREFIX}{hash_func(response.content).hexdigest()}"
+                cache_key: str = f"{CACHE_PREFIX}{hash_func(response.content.encode()).hexdigest()}"
                 cached_page: typing.Optional[str] = cache_instance.get(cache_key)
                 if cached_page:
                     response.content = cached_page
