@@ -9,9 +9,16 @@ import pytest
 from hmin.tests import helpers
 
 
-def test_main(monkeypatch):
+@pytest.mark.parametrize("fail_case", (True, False))
+def test_main(monkeypatch, fail_case: bool) -> None:
     """Check -m command.
     """
     full_main_fpath: str = str(pathlib.Path(__file__).parent.parent.resolve().joinpath("__main__.py"))
-    monkeypatch.setattr("sys.argv", [full_main_fpath, str(helpers.DATA_PATH.joinpath("gazeta.html"))])
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            full_main_fpath,
+            "non_existen.HAHAHA.LOL.bin" if fail_case else str(helpers.DATA_PATH.joinpath("gazeta.html")),
+        ],
+    )
     runpy.run_path(full_main_fpath)

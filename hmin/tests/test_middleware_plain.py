@@ -21,9 +21,8 @@ def test_mark_middleware() -> None:
     assert fake_request.need_to_minify
 
 
-@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
-def test_min_middleware(test_case: dict[str, str]) -> None:
-    """Very simple basic minify test.
+def _run_inner_middleware_test(test_case: dict[str, str]) -> None:
+    """Inner function.
     """
 
     class FakeResponse(dict):
@@ -38,6 +37,14 @@ def test_min_middleware(test_case: dict[str, str]) -> None:
     middleware_inst: middleware.MinMiddleware = middleware.MinMiddleware()
     middleware_inst.process_response(fake_request, fake_response)
     assert test_case["min"] == fake_response.content
+
+
+@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
+def test_min_middleware(test_case: dict[str, str]) -> None:
+    """Very simple basic minify test.
+    """
+
+    _run_inner_middleware_test(test_case)
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
@@ -46,17 +53,34 @@ def test_min_middleware_with_cache(monkeypatch, test_case: dict[str, str]) -> No
     """
     from django.conf import settings
 
-    class FakeResponse(dict):
-        """Fake response class.
-        """
-
-        content: str = test_case["original"]
-
-    fake_request: type = type("Empty", (), {"need_to_minify": True})
-    fake_response: type = FakeResponse()
-    fake_response["Content-Type"] = "text/html"
     settings.HMIN_USE_CACHE = False
-    monkeypatch.setattr("django.conf.settings", settings)
-    middleware_inst: middleware.MinMiddleware = middleware.MinMiddleware()
-    middleware_inst.process_response(fake_request, fake_response)
-    assert test_case["min"] == fake_response.content
+    _run_inner_middleware_test(test_case)
+
+
+@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
+def test_min_middleware_with_xxhash(test_case: dict[str, str]) -> None:
+    """Very simple basic minify test.
+    """
+    import pip
+
+    pip.main(["install", "xxhash"])
+    _run_inner_middleware_test(test_case)
+    pip.main(["uninstall", "xxhash"])
+
+
+@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
+def test_min_middleware_with_broken_cache(monkeypatch, test_case: dict[str, str]) -> None:
+    """Very simple basic minify test.
+    """
+    monkeypatch.setattr("django.core.cache.caches", {})
+    _run_inner_middleware_test(test_case)
+
+
+@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
+def test_min_middleware_with_exclude(monkeypatch, test_case: dict[str, str]) -> None:
+    """Very simple basic minify test.
+    """
+    from django.conf import settings
+
+    settings.HMIN_EXCLUDE = ["/", "hello/"]
+    _run_inner_middleware_test(test_case)
