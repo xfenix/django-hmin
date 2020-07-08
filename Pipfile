@@ -13,6 +13,7 @@ pytest-cov = "*"
 flit = "*"
 pytest-django = "*"
 importlib-metadata = "*"
+pytest-xdist = "*"
 
 [requires]
 python_version = "3"
