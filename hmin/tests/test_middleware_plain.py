@@ -21,7 +21,7 @@ def test_mark_middleware() -> None:
     assert fake_request.need_to_minify
 
 
-def _run_inner_middleware_test(test_case: dict[str, str]) -> None:
+def _run_inner_middleware_test(test_case: dict[str, str], need_to_minify: bool = True) -> None:
     """Inner function.
     """
 
@@ -31,29 +31,33 @@ def _run_inner_middleware_test(test_case: dict[str, str]) -> None:
 
         content: str = test_case["original"]
 
-    fake_request: type = type("Empty", (), {"need_to_minify": True})
+    fake_request: type = type("Empty", (), {"need_to_minify": need_to_minify})
     fake_response: type = FakeResponse()
     fake_response["Content-Type"] = "text/html"
     middleware_inst: middleware.MinMiddleware = middleware.MinMiddleware()
     middleware_inst.process_response(fake_request, fake_response)
-    assert test_case["min"] == fake_response.content
+    assert test_case["min" if need_to_minify else "original"] == fake_response.content
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware(test_case: dict[str, str]) -> None:
     """Very simple basic minify test.
     """
-
     _run_inner_middleware_test(test_case)
+
+
+@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
+def test_min_middleware_need_no_minify(test_case: dict[str, str]) -> None:
+    """Very simple basic minify test.
+    """
+    _run_inner_middleware_test(test_case, need_to_minify=False)
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware_with_cache(monkeypatch, test_case: dict[str, str]) -> None:
     """Very simple basic minify test.
     """
-    from django.conf import settings
-
-    settings.HMIN_USE_CACHE = False
+    monkeypatch.setattr("django.conf.settings.HMIN_USE_CACHE", False)
     _run_inner_middleware_test(test_case)
 
 
@@ -80,7 +84,5 @@ def test_min_middleware_with_broken_cache(monkeypatch, test_case: dict[str, str]
 def test_min_middleware_with_exclude(monkeypatch, test_case: dict[str, str]) -> None:
     """Very simple basic minify test.
     """
-    from django.conf import settings
-
-    settings.HMIN_EXCLUDE = ["/", "hello/"]
+    monkeypatch.setattr("django.conf.settings.HMIN_EXCLUDE", ["/", "hello/"])
     _run_inner_middleware_test(test_case)
