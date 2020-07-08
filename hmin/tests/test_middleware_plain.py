@@ -21,7 +21,9 @@ def test_mark_middleware() -> None:
     assert fake_request.need_to_minify
 
 
-def _run_inner_middleware_test(test_case: dict[str, str], need_to_minify: bool = True) -> None:
+def _run_inner_middleware_test(
+    test_case: dict[str, str], need_to_minify: bool = True, content_type: bool = True
+) -> None:
     """Inner function.
     """
 
@@ -33,10 +35,11 @@ def _run_inner_middleware_test(test_case: dict[str, str], need_to_minify: bool =
 
     fake_request: type = type("Empty", (), {"need_to_minify": need_to_minify})
     fake_response: type = FakeResponse()
-    fake_response["Content-Type"] = "text/html"
+    if content_type:
+        fake_response["Content-Type"] = "text/html"
     middleware_inst: middleware.MinMiddleware = middleware.MinMiddleware()
     middleware_inst.process_response(fake_request, fake_response)
-    assert test_case["min" if need_to_minify else "original"] == fake_response.content
+    assert test_case["min" if need_to_minify and content_type else "original"] == fake_response.content
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
@@ -51,6 +54,13 @@ def test_min_middleware_need_no_minify(test_case: dict[str, str]) -> None:
     """Very simple basic minify test.
     """
     _run_inner_middleware_test(test_case, need_to_minify=False)
+
+
+@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
+def test_min_middleware_with_no_content_type(test_case: dict[str, str]) -> None:
+    """Very simple basic minify test.
+    """
+    _run_inner_middleware_test(test_case, content_type=False)
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
