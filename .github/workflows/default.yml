@@ -25,6 +25,8 @@ jobs:
       run: |
         pip install pipenv
         pipenv install
+    - name: Install django ${{ matrix.django-version }}
+      run: |
         pipenv run pip install django==${{ matrix.django-version }}
     - name: Install package (check installation is ok)
       run: |
