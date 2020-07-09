@@ -11,10 +11,10 @@ MIN_INFIX: str = "_min"
 TYPICAL_HTML_CASES: tuple = (
     ("""<div>     """, "<div>"),
     (
-        """<div>  hey    
-            <p>
+        """<div data-kek=\"500\">  hey    
+            <p> <!-- trash -->
             """,
-        "<div>hey<p>",
+        '<div data-kek="500">hey<p>',
     ),
     (
         """<!-- comments by default is removing -->
@@ -36,6 +36,17 @@ TYPICAL_HTML_CASES: tuple = (
             """,
         '<a href="#">asdsad</a>',
     ),
+    (
+        """<div style="border: 1px solid grey; color: green"><p><br>
+
+        Broken HTML?</ >
+            """,
+        '<div style="border: 1px solid grey; color: green"><p><br>Broken HTML?</ >',
+    ),
+    ("privet    >   1000    <           kak", "privet > 1000 < kak",),
+    ("         ", ""),
+    ("<div> </div>", "<div></div>"),
+    ('<b> hm <a href="#">what</a> </b>', '<b>hm<a href="#">what</a></b>'),
 )
 
 
