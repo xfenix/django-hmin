@@ -62,7 +62,3 @@ def load_html_fixtures() -> tuple[dict[str, str]]:
             "min" if MIN_INFIX in one_file.stem else "original"
         ] = one_file.read_text()
     return tuple(map_of_files.values())
-
-
-# import os
-# os.environ["DJANGO_SETTINGS_MODULE"] = "hmin.tests.mock_settings"
