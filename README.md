@@ -16,11 +16,17 @@ For best expirience use it with https://github.com/django-compressor/django-comp
 
 Written in modern python 3.7+ with fully typing-covered codebase.
 
+Full support of:
+* https://www.python.org/dev/peps/pep-0526/
+* https://www.python.org/dev/peps/pep-0484/
+* https://www.python.org/dev/peps/pep-0008/
+* https://www.python.org/dev/peps/pep-0257/
+
 
 Compatibility
 ===
 * Python 3.7+
-* Django 2.0+
+* Django 2.0+ (not required)
 
 
 Install
