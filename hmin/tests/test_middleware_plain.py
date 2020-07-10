@@ -74,7 +74,7 @@ def test_min_middleware_with_cache(monkeypatch, test_case: dict[str, str]) -> No
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
-def test_min_middleware_with_xxhash(monkeypatch, test_case: dict[str, str]) -> None:
+def test_min_middleware_without_xxhash(monkeypatch, test_case: dict[str, str]) -> None:
     """Very simple basic minify test.
     """
     pip.main(["uninstall", "xxhash"])
