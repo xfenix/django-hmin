@@ -83,6 +83,16 @@ def test_min_middleware_without_xxhash(monkeypatch, test_case: dict[str, str]) -
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
+def test_min_middleware_with_xxhash(monkeypatch, test_case: dict[str, str]) -> None:
+    """Very simple basic minify test.
+    """
+    pip.main(["install", "xxhash"])
+    importlib.reload(middleware)
+    _run_inner_middleware_test(test_case)
+    pip.main(["uninstall", "xxhash"])
+
+
+@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware_with_broken_cache(monkeypatch, settings, test_case: dict[str, str]) -> None:
     """Very simple basic minify test.
     """
