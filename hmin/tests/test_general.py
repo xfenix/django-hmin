@@ -13,7 +13,7 @@ from hmin.tests import helpers
 def test_main(monkeypatch, fail_case: bool) -> None:
     """Check -m command.
     """
-    full_main_fpath: str = str(pathlib.Path(__file__).parent.parent.resolve().joinpath("__main__.py"))
+    full_main_fpath: str = str(helpers.ROOT_PATH.joinpath("__main__.py"))
     monkeypatch.setattr(
         "sys.argv",
         [

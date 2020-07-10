@@ -33,10 +33,11 @@ EXCLUDE_PAGES: list = []
 
 
 # get cache provider, or disable caching
-try:
-    cache_instance: BaseCache = caches[getattr(settings, "HMIN_CACHE_BACKEND", "default")]
-except (InvalidCacheBackendError, NameError):
-    USE_CACHE = False
+if USE_CACHE:
+    try:
+        cache_instance: BaseCache = caches[getattr(settings, "HMIN_CACHE_BACKEND", "default")]
+    except (InvalidCacheBackendError, NameError):
+        USE_CACHE = False
 
 
 # process exclude pages

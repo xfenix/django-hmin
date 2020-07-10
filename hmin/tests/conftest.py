@@ -1,6 +1,15 @@
 """Some inter tests things.
 """
-import os
+from django.conf import settings
 
 
-os.environ["DJANGO_SETTINGS_MODULE"] = "hmin.tests.mock_settings"
+def pytest_configure() -> None:
+    """Django config.
+    """
+    settings.configure(
+        DEBUG=True,
+        SECRET_KEY="no",
+        DATABASES={},
+        HTML_MINIFY=True,
+        HMIN_USE_CACHE=True,  # HMIN_EXCLUDE=["/", "hello/"],
+    )

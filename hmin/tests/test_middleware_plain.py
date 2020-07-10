@@ -4,7 +4,10 @@ from __future__ import annotations
 import os
 import codecs
 import pathlib
+import importlib
+from unittest import mock
 
+import pip
 import pytest
 
 from hmin import middleware
@@ -22,7 +25,7 @@ def test_mark_middleware() -> None:
 
 
 def _run_inner_middleware_test(
-    test_case: dict[str, str], need_to_minify: bool = True, content_type: bool = True
+    test_case: dict[str, str], need_to_minify: bool = True, content_type: bool = True, compare_min: bool = True
 ) -> None:
     """Inner function.
     """
@@ -33,13 +36,13 @@ def _run_inner_middleware_test(
 
         content: str = test_case["original"]
 
-    fake_request: type = type("Empty", (), {"need_to_minify": need_to_minify})
+    fake_request: type = type("Empty", (), {"need_to_minify": need_to_minify, "path": "debug"})
     fake_response: type = FakeResponse()
     if content_type:
         fake_response["Content-Type"] = "text/html"
     middleware_inst: middleware.MinMiddleware = middleware.MinMiddleware()
     middleware_inst.process_response(fake_request, fake_response)
-    assert test_case["min" if need_to_minify and content_type else "original"] == fake_response.content
+    assert test_case["min" if compare_min else "original"] == fake_response.content
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
@@ -53,46 +56,75 @@ def test_min_middleware(test_case: dict[str, str]) -> None:
 def test_min_middleware_need_no_minify(test_case: dict[str, str]) -> None:
     """Very simple basic minify test.
     """
-    _run_inner_middleware_test(test_case, need_to_minify=False)
+    _run_inner_middleware_test(test_case, need_to_minify=False, compare_min=False)
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware_with_no_content_type(test_case: dict[str, str]) -> None:
     """Very simple basic minify test.
     """
-    _run_inner_middleware_test(test_case, content_type=False)
+    _run_inner_middleware_test(test_case, content_type=False, compare_min=False)
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware_with_cache(monkeypatch, test_case: dict[str, str]) -> None:
     """Very simple basic minify test.
     """
-    monkeypatch.setattr("django.conf.settings.HMIN_USE_CACHE", False)
     _run_inner_middleware_test(test_case)
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
-def test_min_middleware_with_xxhash(test_case: dict[str, str]) -> None:
+def test_min_middleware_with_xxhash(monkeypatch, test_case: dict[str, str]) -> None:
     """Very simple basic minify test.
     """
-    import pip
-
-    pip.main(["install", "xxhash"])
-    _run_inner_middleware_test(test_case)
     pip.main(["uninstall", "xxhash"])
-
-
-@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
-def test_min_middleware_with_broken_cache(monkeypatch, test_case: dict[str, str]) -> None:
-    """Very simple basic minify test.
-    """
-    monkeypatch.setattr("django.core.cache.caches", {})
+    importlib.reload(middleware)
     _run_inner_middleware_test(test_case)
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
-def test_min_middleware_with_exclude(monkeypatch, test_case: dict[str, str]) -> None:
+def test_min_middleware_with_broken_cache(monkeypatch, settings, test_case: dict[str, str]) -> None:
     """Very simple basic minify test.
     """
-    monkeypatch.setattr("django.conf.settings.HMIN_EXCLUDE", ["/", "hello/"])
+    settings.HMIN_USE_CACHE = False
+    importlib.reload(middleware)
     _run_inner_middleware_test(test_case)
+
+
+@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
+def test_min_middleware_with_exclude(monkeypatch, test_case: dict[str, str], settings) -> None:
+    """Very simple basic minify test.
+    """
+    settings.HMIN_EXCLUDE = ["hello/", "unrelated/", "strange/trash/happens/"]
+    importlib.reload(middleware)
+    _run_inner_middleware_test(test_case)
+
+
+@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
+def test_min_middleware_with_exclude_really(monkeypatch, test_case: dict[str, str], settings) -> None:
+    """Very simple basic minify test.
+    """
+    settings.HMIN_EXCLUDE = [
+        "debug",
+    ]
+    importlib.reload(middleware)
+    _run_inner_middleware_test(test_case, compare_min=False)
+
+
+@pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
+def test_bad_caches(monkeypatch, test_case: dict[str, str], settings) -> None:
+    """Very simple basic minify test.
+    """
+
+    class FakeDict:
+        """Raise exception for caches fetching.
+        """
+
+        def __getitem__(self, _) -> None:
+            """Obvious.
+            """
+            raise NameError
+
+    monkeypatch.setattr("django.core.cache.caches", FakeDict())
+    importlib.reload(middleware)
+    _run_inner_middleware_test(test_case, compare_min=True)

@@ -6,7 +6,9 @@ import pathlib
 from collections import defaultdict
 
 
-DATA_PATH: pathlib.Path = pathlib.Path(__file__).parent.resolve().joinpath("data")
+TESTS_PATH: pathlib.Path = pathlib.Path(__file__).parent.resolve()
+ROOT_PATH: pathlib.Path = TESTS_PATH.parent.resolve()
+DATA_PATH: pathlib.Path = TESTS_PATH.resolve().joinpath("data")
 MIN_INFIX: str = "_min"
 TYPICAL_HTML_CASES: tuple = (
     ("""<div>     """, "<div>"),
