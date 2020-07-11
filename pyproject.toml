@@ -7,6 +7,7 @@ module = "hmin"
 author = "Denis Anikin"
 author-email = "ad@xfenix.ru"
 description-file = "README.md"
+requires-python=">=3.7"
 home-page = "https://github.com/xfenix/django-hmin/"
 classifiers = [
     "License :: OSI Approved :: MIT License",
@@ -20,3 +21,6 @@ classifiers = [
     "Framework :: Django :: 3.1",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+
+[tool.flit.metadata.urls]
+Documentation = "https://github.com/xfenix/django-hmin/#django-hmin"
