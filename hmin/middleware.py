@@ -90,7 +90,7 @@ class MinMiddleware(_BasicMiddleware):
             body_content: str = response.content.decode()
             minified_content: str = ""
             if USE_CACHE:
-                cache_key: str = f"{CACHE_PREFIX}{hash_func(body_content).hexdigest()}"
+                cache_key: str = f"{CACHE_PREFIX}{hash_func(response.content).hexdigest()}"
                 cached_page: typing.Optional[str] = cache_instance.get(cache_key)
                 if cached_page:
                     minified_content = cached_page
