@@ -158,6 +158,10 @@ Django overhead was about **80ms**.
 Minus overhead, plain time: hmin - **140ms** (**7ms** with cache), htmlmin - ok.
 
 
+Changelog
+==
+You can check https://github.com/xfenix/django-hmin/releases release page.
+
 Current possible problems
 ==
 * Doesnt respect CDATA
