@@ -34,7 +34,8 @@ jobs:
     - name: Run tests
       run: |
         pipenv run pytest -n2 --cov=./ --cov-report=xml
-    - uses: actions/upload-artifact@v2
+    - name: Upload code coverage to be accessed in next job
+      uses: actions/upload-artifact@v2
       with:
         name: coverage.xml
         path: ./coverage.xml
