@@ -3,6 +3,7 @@ requires = ["flit_core >=2,<4", "xxhash"]
 build-backend = "flit_core.buildapi"
 
 [tool.flit.metadata]
+dist-name = "django-hmin"
 module = "hmin"
 author = "Denis Anikin"
 author-email = "ad@xfenix.ru"
