@@ -28,9 +28,11 @@ jobs:
     - name: Install Django ${{ matrix.django-version }}
       run: |
         pipenv run pip install django==${{ matrix.django-version }}
-    - name: Install package (check installation is ok)
+    - name: Install package and check installed middle is working
       run: |
         pipenv run flit install
+        DJANGO_SETTINGS_MODULE=fake_django.settings pytest django-for-development
+        pipenv run pip uninstall hmin
     - name: Run tests
       run: |
         pipenv run pytest -n2 --cov=./ --cov-report=xml
