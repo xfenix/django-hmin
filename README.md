@@ -22,6 +22,7 @@ Full support of:
 * https://www.python.org/dev/peps/pep-0008/
 * https://www.python.org/dev/peps/pep-0257/
 * https://www.python.org/dev/peps/pep-0518/
+* https://www.python.org/dev/peps/pep-0585/
 
 
 Compatibility
