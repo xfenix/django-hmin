@@ -23,5 +23,8 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
+[tool.flit.sdist]
+exclude = ["django-for-development/"]
+
 [tool.flit.metadata.urls]
 Documentation = "https://github.com/xfenix/django-hmin/#django-hmin"
