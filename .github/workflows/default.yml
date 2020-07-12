@@ -31,7 +31,7 @@ jobs:
     - name: Install package and check installed middle is working
       run: |
         pipenv run flit install
-        DJANGO_SETTINGS_MODULE=fake_django.settings pytest django-for-development
+        DJANGO_SETTINGS_MODULE=fake_django.settings pipenv run pytest django-for-development
         pipenv run pip uninstall hmin
     - name: Run tests
       run: |
