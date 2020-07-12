@@ -81,19 +81,19 @@ The default value for the ``HTML_MINIFY`` setting is ``not DEBUG``. You only
 need to set it to ``True`` if you want to minify your HTML code when ``DEBUG``
 is enabled.
 
-##### URL exclude
+### URL exclude
 Specify setting:
 ```python
 HMIN_EXCLUDE: tuple = ('^base/', '^admin/')
 ```
 
-##### Keep HTML comments
+### Keep HTML comments
 Specify settings:
 ```python
 HMIN_REMOVE_COMMENTS: bool = False
 ```
 
-##### Cache
+### Cache
 By default hmin middleware uses cache via django caches framework (very useful for small and middle web sites, and for big you definitely will use ngx_pagespeed or other "big" solutions).
 You can disable it by specify setting:
 ```python
