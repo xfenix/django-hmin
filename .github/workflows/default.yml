@@ -36,7 +36,7 @@ jobs:
         pipenv run pytest -n2 --cov=./ --cov-report=xml
     - uses: actions/upload-artifact@v2
       with:
-        name: coverage.xml
+        name: coveragefile
         path: ./coverage.xml
 
   upload-codecov:
@@ -44,7 +44,7 @@ jobs:
     steps:
     - uses: actions/download-artifact@v2
       with:
-        name: coverage.xml
+        name: coveragefile
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
