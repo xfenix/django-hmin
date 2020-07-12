@@ -56,21 +56,21 @@ jobs:
         name: codecov-umbrella
         fail_ci_if_error: true
 
-  # publish-pypi:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Set up Python
-  #     uses: actions/setup-python@v2
-  #     with:
-  #       python-version: 3.8
-  #   - name: Publish package
-  #     env:
-  #       FLIT_USERNAME: ${{ secrets.FLIT_USERNAME }}
-  #       FLIT_PASSWORD: ${{ secrets.FLIT_PASSWORD }}
-  #     continue-on-error: true
-  #     run: |
-  #       pip install pipenv
-  #       pipenv install
-  #       pipenv run flit publish
+  publish-pypi:
+    needs: upload-codecov
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Publish package
+      env:
+        FLIT_USERNAME: ${{ secrets.FLIT_USERNAME }}
+        FLIT_PASSWORD: ${{ secrets.FLIT_PASSWORD }}
+      continue-on-error: true
+      run: |
+        pip install pipenv
+        pipenv install
+        pipenv run flit publish
