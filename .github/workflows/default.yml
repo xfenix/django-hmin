@@ -35,7 +35,7 @@ jobs:
         pipenv run pip uninstall hmin
     - name: Run tests
       run: |
-        pipenv run pytest -n2 --cov=./ --cov-report=xml
+        pipenv run pytest -n2 hmin --cov=./ --cov-report=xml
     - name: Upload code coverage to be accessed in next job
       uses: actions/upload-artifact@v2
       with:
