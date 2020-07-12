@@ -143,28 +143,31 @@ $ python -m hmin filename.html > filename.min.html
 
 Benchmarking (wannabe)
 ==
-### Stupid speed benchmark (1)
-I try to compress 1mb of html (i think, your usual html is slightly thiner) on my i7 laptop processor and measure time with django-debug-toolbar.
+### New data
+I try to compress 1.1mb of very dense html on my i7 laptop processor (2020 edition!) and measure raw time with chrome inspector.  
+I got following data (this data comes from field "Waiting (TTFB)", not "Content Download"):
+* htmlmin took about **2.5 seconds**!
+* this package took **100ms**
+As you can see, hmin 0.5+ are slightly slower then 0.3, but this is comes from updated minifcation logic. In previous version minification was not so accurate, as i think. But, hmin still very much faster.  
+Maybe in the next releases i made some experiments with cython or numba to improve speed.
 
-Django overhead took about 40ms (all), this is time without  minification, just plain html, django, etc.
-
+### Old data (version < 0.5)
+#### Stupid speed benchmark (1)
+I try to compress 1mb of html (i think, your usual html is slightly thiner) on my i7 laptop processor and measure time with django-debug-toolbar.  
+Django overhead took about 40ms (all), this is time without  minification, just plain html, django, etc.  
 Then i install hmin and htmlmin and just look at the debug toolbar numbers (this is very silly and simple "benchmark"):
-- with hmin cpu was about **60ms** (min)
-- with htmlmin cpu was about **1200ms** (min)
-
-Minus overhead, plain time: hmin - **20ms**, htmlmin - **1160ms**.
-
+* with hmin cpu was about **60ms** (min)
+* with htmlmin cpu was about **1200ms** (min)
+Minus overhead, plain time: hmin — **20ms**, htmlmin — **1160ms**.  
 Probably, you can get other numbers. But hmin really faster than  htmlmin.
 
-### Stupid speed benchmark (2)
-Also i try to compress 2mb of html on my desktop i3 (sandy bridge).
-
+#### Stupid speed benchmark (2)
+Also i try to compress 2mb of html on my desktop i3 (sandy bridge).  
 Debug toolbar time:
-- with hmin cpu was about **220ms** without cache, and **87ms** with cache
-- with htmlmin cpu was about **125000ms**
-
-Django overhead was about **80ms**.
-Minus overhead, plain time: hmin - **140ms** (**7ms** with cache), htmlmin - ok.
+* with hmin cpu was about **220ms** without cache, and **87ms** with cache
+* with htmlmin cpu was about **125000ms**
+Django overhead was about **80ms**.  
+Minus overhead, plain time: hmin — **140ms** (**7ms** with cache), htmlmin — ok.
 
 
 Changelog
