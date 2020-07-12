@@ -54,16 +54,10 @@ class _BasicMiddleware:
     def __init__(self, get_response: typing.Callable) -> None:
         self.get_response: typing.Callable = get_response
 
-    def __call__(self, request: HttpRequest) -> HttpResponse:
-        return self.get_response(request)
-
 
 class MarkMiddleware(_BasicMiddleware):
     """This middleware suposed to be first. It mean to be used with cache middlewares in django.
     """
-
-    def __init__(self, get_response: typing.Callable) -> None:
-        self.get_response: typing.Callable = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
         """Allow minification flag.
@@ -75,9 +69,6 @@ class MarkMiddleware(_BasicMiddleware):
 class MinMiddleware(_BasicMiddleware):
     """Minification middleware itself.
     """
-
-    def __init__(self, get_response: typing.Callable) -> None:
-        self.get_response: typing.Callable = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
         """Minification goes here.
@@ -95,16 +86,18 @@ class MinMiddleware(_BasicMiddleware):
                 if one_regex.match(current_path):
                     return response
 
-        body_content: str = response.content.decode()
         if "Content-Type" in response and "text/html" in response["Content-Type"] and MINIFICATION_ENABLED:
+            body_content: str = response.content.decode()
+            minified_content: str = ""
             if USE_CACHE:
                 cache_key: str = f"{CACHE_PREFIX}{hash_func(body_content).hexdigest()}"
                 cached_page: typing.Optional[str] = cache_instance.get(cache_key)
                 if cached_page:
-                    response.content = cached_page
+                    minified_content = cached_page
                 else:
-                    response.content = html_minify(body_content, REMOVE_COMMENTS)
-                    cache_instance.set(cache_key, body_content, TIMEOUT)
+                    minified_content = html_minify(body_content, REMOVE_COMMENTS)
+                    cache_instance.set(cache_key, minified_content, TIMEOUT)
             else:
-                response.content = html_minify(body_content, REMOVE_COMMENTS)
+                minified_content = html_minify(body_content, REMOVE_COMMENTS)
+            response.content = minified_content.encode()
         return response

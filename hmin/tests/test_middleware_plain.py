@@ -19,8 +19,7 @@ def test_mark_middleware() -> None:
     """Very simple basic test.
     """
     fake_request: type = type("Empty", (), {})
-    middleware_inst: middleware.MarkMiddleware = middleware.MarkMiddleware()
-    middleware_inst.process_request(fake_request)
+    middleware.MarkMiddleware(lambda _: None)(fake_request)
     assert fake_request.need_to_minify
 
 
@@ -34,15 +33,15 @@ def _run_inner_middleware_test(
         """Fake response class.
         """
 
-        content: str = test_case["original"]
+        content: bytes = test_case["original"].encode()
 
     fake_request: type = type("Empty", (), {"need_to_minify": need_to_minify, "path": "debug"})
     fake_response: type = FakeResponse()
     if content_type:
         fake_response["Content-Type"] = "text/html"
-    middleware_inst: middleware.MinMiddleware = middleware.MinMiddleware()
-    middleware_inst.process_response(fake_request, fake_response)
-    assert test_case["min" if compare_min else "original"] == fake_response.content
+    middleware_inst: middleware.MinMiddleware = middleware.MinMiddleware(lambda _: fake_response)
+    middleware_inst(fake_request)
+    assert test_case["min" if compare_min else "original"] == fake_response.content.decode()
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
