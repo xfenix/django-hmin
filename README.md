@@ -148,7 +148,7 @@ I try to compress 1.1mb of very dense html on my i7 laptop processor (2020 editi
 I got following data (this data comes from field "Waiting (TTFB)", not "Content Download"):
 * htmlmin took about **2.5 seconds**!
 * this package took **100ms**
-As you can see, hmin 0.5+ are slightly slower then 0.3, but this is comes from updated minifcation logic. In previous version minification was not so accurate, as i think. But, hmin still very much faster.  
+As you can see, hmin 0.5+ are slightly slower than 0.3, but this is comes from updated minifcation logic. In previous version minification was not so accurate, as i think. But, hmin still very much faster.  
 Maybe in the next releases i made some experiments with cython or numba to improve speed.
 
 ### Old data (version < 0.5)
