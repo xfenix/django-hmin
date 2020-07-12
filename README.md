@@ -21,6 +21,7 @@ Full support of:
 * https://www.python.org/dev/peps/pep-0484/
 * https://www.python.org/dev/peps/pep-0008/
 * https://www.python.org/dev/peps/pep-0257/
+* https://www.python.org/dev/peps/pep-0518/
 
 
 Compatibility
@@ -31,10 +32,20 @@ Compatibility
 
 Install
 ===
+
+### Regular way
 For install django-hmin, run on terminal:
 ```bash
 $ pip install django-hmin
 ```
+
+### Advanced
+If there is no release, or you dont want/cant use pypi, then:
+* `git clone` this repo
+* `pipenv install` to install requirements or just `pip install flit`
+* `flit install`
+Yes, we dont use classic `setup.py`, we use flit + `pyproject.toml`. Go bless PEP-518 + PEP-621.
+
 
 Using with Django as midleware
 ===
@@ -114,7 +125,6 @@ def my_cool_func():
     return some_plain_html
 ```
 
-
 ## Solo
 Just import function minify. Function definition: `def minify(content, remove_comments=True)`. Example:
 ```python
@@ -123,7 +133,6 @@ from hmin import html_minify
 
 html_minify('<div>     hello</div>') # <div>hello</div>
 ```
-
 
 ## CLI
 ```bash
@@ -145,7 +154,6 @@ Then i install hmin and htmlmin and just look at the debug toolbar numbers (this
 Minus overhead, plain time: hmin - **20ms**, htmlmin - **1160ms**.
 
 Probably, you can get other numbers. But hmin really faster than  htmlmin.
-
 
 ## Stupid speed benchmark (2)
 Also i try to compress 2mb of html on my desktop i3 (sandy bridge).
