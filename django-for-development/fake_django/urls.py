@@ -7,4 +7,5 @@ from base import views
 
 urlpatterns = [
     path("", views.IndexView.as_view()),
+    path("dense/", views.DenseView.as_view()),
 ]

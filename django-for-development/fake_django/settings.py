@@ -8,7 +8,6 @@ BASE_DIR = pathlib.Path(__file__).parent
 SECRET_KEY = "razwx%pkjekemw^r^0tzhd^d4!8vlj*3@j9lh_=rc(p)br%m+j"
 DEBUG = True
 ALLOWED_HOSTS = []
-WSGI_APPLICATION = "fake_django.wsgi.application"
 ROOT_URLCONF = "fake_django.urls"
 STATIC_URL = "/static/"
 
@@ -33,6 +32,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # other middleware classes
+    # "htmlmin.middleware.HtmlMinifyMiddleware",
+    # "htmlmin.middleware.MarkRequestMiddleware",
     "hmin.middleware.MinMiddleware",
     "hmin.middleware.MarkMiddleware",
 ]
