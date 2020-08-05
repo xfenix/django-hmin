@@ -1,5 +1,4 @@
-"""Views fake.
-"""
+"""Views fake."""
 from django.views.generic import TemplateView
 
 

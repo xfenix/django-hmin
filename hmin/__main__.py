@@ -1,5 +1,4 @@
-"""For python -m usage.
-"""
+"""For python -m usage."""
 import pathlib
 import argparse
 
@@ -7,8 +6,7 @@ from hmin.base import html_minify
 
 
 def main_cli() -> None:
-    """Minify CLI functionality.
-    """
+    """Minify CLI functionality."""
     parser: argparse.ArgumentParser = argparse.ArgumentParser()
     parser.add_argument("filename", type=pathlib.Path)
     parsed_arguments: argparse.Namespace = parser.parse_args()

@@ -1,5 +1,5 @@
-"""Html minification middleware with (but not only) django support and good speed.
-"""
+"""Html minification middleware with (but not only) django support and good
+speed."""
 from .base import html_minify
 
 

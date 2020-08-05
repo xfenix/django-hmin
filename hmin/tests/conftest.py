@@ -1,11 +1,9 @@
-"""Some inter tests things.
-"""
+"""Some inter tests things."""
 from django.conf import settings
 
 
 def pytest_configure() -> None:
-    """Django config.
-    """
+    """Django config."""
     settings.configure(
         DEBUG=True,
         SECRET_KEY="no",

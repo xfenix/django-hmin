@@ -1,5 +1,4 @@
-"""Django middleware.
-"""
+"""Django middleware."""
 from __future__ import annotations
 import re
 import typing
@@ -48,31 +47,29 @@ if hasattr(settings, "HMIN_EXCLUDE"):
 
 # Middlewares starts here
 class _BasicMiddleware:
-    """Basic middleware mixin.
-    """
+    """Basic middleware mixin."""
 
     def __init__(self, get_response: typing.Callable) -> None:
         self.get_response: typing.Callable = get_response
 
 
 class MarkMiddleware(_BasicMiddleware):
-    """This middleware suposed to be first. It mean to be used with cache middlewares in django.
+    """This middleware suposed to be first.
+
+    It mean to be used with cache middlewares in django.
     """
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        """Allow minification flag.
-        """
+        """Allow minification flag."""
         request.need_to_minify = True
         return self.get_response(request)
 
 
 class MinMiddleware(_BasicMiddleware):
-    """Minification middleware itself.
-    """
+    """Minification middleware itself."""
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        """Minification goes here.
-        """
+        """Minification goes here."""
         response: HttpResponse = self.get_response(request)
 
         # prevent from minifying cached pages

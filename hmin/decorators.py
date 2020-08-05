@@ -1,5 +1,4 @@
-"""Decorators module.
-"""
+"""Decorators module."""
 from __future__ import annotations
 import typing
 from functools import wraps

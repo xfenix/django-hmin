@@ -1,5 +1,4 @@
-"""All tests here.
-"""
+"""All tests here."""
 from __future__ import annotations
 import os
 import codecs
@@ -16,8 +15,7 @@ from hmin.base import html_minify
 
 
 def test_mark_middleware() -> None:
-    """Very simple basic test.
-    """
+    """Very simple basic test."""
     fake_request: type = type("Empty", (), {})
     middleware.MarkMiddleware(lambda _: None)(fake_request)
     assert fake_request.need_to_minify
@@ -26,12 +24,10 @@ def test_mark_middleware() -> None:
 def _run_inner_middleware_test(
     test_case: dict[str, str], need_to_minify: bool = True, content_type: bool = True, compare_min: bool = True
 ) -> None:
-    """Inner function.
-    """
+    """Inner function."""
 
     class FakeResponse(dict):
-        """Fake response class.
-        """
+        """Fake response class."""
 
         content: bytes = test_case["original"].encode()
 
@@ -46,36 +42,31 @@ def _run_inner_middleware_test(
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware(test_case: dict[str, str]) -> None:
-    """Very simple basic minify test.
-    """
+    """Very simple basic minify test."""
     _run_inner_middleware_test(test_case)
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware_need_no_minify(test_case: dict[str, str]) -> None:
-    """Very simple basic minify test.
-    """
+    """Very simple basic minify test."""
     _run_inner_middleware_test(test_case, need_to_minify=False, compare_min=False)
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware_with_no_content_type(test_case: dict[str, str]) -> None:
-    """Very simple basic minify test.
-    """
+    """Very simple basic minify test."""
     _run_inner_middleware_test(test_case, content_type=False, compare_min=False)
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware_with_cache(monkeypatch, test_case: dict[str, str]) -> None:
-    """Very simple basic minify test.
-    """
+    """Very simple basic minify test."""
     _run_inner_middleware_test(test_case)
 
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware_without_xxhash(monkeypatch, test_case: dict[str, str]) -> None:
-    """Very simple basic minify test.
-    """
+    """Very simple basic minify test."""
     pip.main(["uninstall", "xxhash"])
     importlib.reload(middleware)
     _run_inner_middleware_test(test_case)
@@ -83,8 +74,7 @@ def test_min_middleware_without_xxhash(monkeypatch, test_case: dict[str, str]) -
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware_with_xxhash(monkeypatch, test_case: dict[str, str]) -> None:
-    """Very simple basic minify test.
-    """
+    """Very simple basic minify test."""
     pip.main(["install", "xxhash"])
     importlib.reload(middleware)
     _run_inner_middleware_test(test_case)
@@ -93,8 +83,7 @@ def test_min_middleware_with_xxhash(monkeypatch, test_case: dict[str, str]) -> N
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware_with_broken_cache(monkeypatch, settings, test_case: dict[str, str]) -> None:
-    """Very simple basic minify test.
-    """
+    """Very simple basic minify test."""
     settings.HMIN_USE_CACHE = False
     importlib.reload(middleware)
     _run_inner_middleware_test(test_case)
@@ -102,8 +91,7 @@ def test_min_middleware_with_broken_cache(monkeypatch, settings, test_case: dict
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware_with_exclude(monkeypatch, test_case: dict[str, str], settings) -> None:
-    """Very simple basic minify test.
-    """
+    """Very simple basic minify test."""
     settings.HMIN_EXCLUDE = ["hello/", "unrelated/", "strange/trash/happens/"]
     importlib.reload(middleware)
     _run_inner_middleware_test(test_case)
@@ -111,8 +99,7 @@ def test_min_middleware_with_exclude(monkeypatch, test_case: dict[str, str], set
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_min_middleware_with_exclude_really(monkeypatch, test_case: dict[str, str], settings) -> None:
-    """Very simple basic minify test.
-    """
+    """Very simple basic minify test."""
     settings.HMIN_EXCLUDE = [
         "debug",
     ]
@@ -122,16 +109,13 @@ def test_min_middleware_with_exclude_really(monkeypatch, test_case: dict[str, st
 
 @pytest.mark.parametrize("test_case", helpers.load_html_fixtures())
 def test_bad_caches(monkeypatch, test_case: dict[str, str], settings) -> None:
-    """Very simple basic minify test.
-    """
+    """Very simple basic minify test."""
 
     class FakeDict:
-        """Raise exception for caches fetching.
-        """
+        """Raise exception for caches fetching."""
 
         def __getitem__(self, _) -> None:
-            """Obvious.
-            """
+            """Obvious."""
             raise NameError
 
     monkeypatch.setattr("django.core.cache.caches", FakeDict())

@@ -1,5 +1,4 @@
-"""All tests here.
-"""
+"""All tests here."""
 from __future__ import annotations
 import pathlib
 import runpy
@@ -11,8 +10,7 @@ from hmin.tests import helpers
 
 @pytest.mark.parametrize("fail_case", (True, False))
 def test_main(monkeypatch, fail_case: bool) -> None:
-    """Check -m command.
-    """
+    """Check -m command."""
     full_main_fpath: str = str(helpers.ROOT_PATH.joinpath("__main__.py"))
     monkeypatch.setattr(
         "sys.argv",

@@ -1,12 +1,10 @@
-"""Test django integration.
-"""
+"""Test django integration."""
 from django.test import Client
 from django.http import HttpResponse
 
 
 def test_middleware_indexpage():
-    """Test.
-    """
+    """Test."""
     view_response: HttpResponse = Client().get("/")
     assert (
         view_response.content

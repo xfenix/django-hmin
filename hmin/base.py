@@ -1,5 +1,4 @@
-"""Core logic module.
-"""
+"""Core logic module."""
 from __future__ import annotations
 import re
 import logging
@@ -17,8 +16,7 @@ RE_LEFT_SPACES_AROUND_TAGS: re.Pattern = re.compile(r"(?:\s|)(<.*?>)(?:\s|)", fl
 
 
 def html_minify(data_input: str, remove_comments=True) -> str:
-    """Core minification function.
-    """
+    """Core minification function."""
     safe_storage: dict = dict()
 
     # helpers

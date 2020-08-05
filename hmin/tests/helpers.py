@@ -1,5 +1,4 @@
-"""Some wide test things.
-"""
+"""Some wide test things."""
 from __future__ import annotations
 import codecs
 import pathlib
@@ -53,8 +52,7 @@ TYPICAL_HTML_CASES: tuple = (
 
 
 def load_html_fixtures() -> tuple[dict[str, str]]:
-    """Load all html fixtures and return tuple ((original, processed), ...).
-    """
+    """Load all html fixtures and return tuple ((original, processed), ...)."""
     map_key: str
     map_of_files: defaultdict = defaultdict(dict)
     for one_file in DATA_PATH.glob("*.html"):

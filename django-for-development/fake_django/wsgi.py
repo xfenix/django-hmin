@@ -1,5 +1,4 @@
-"""
-WSGI config for debug project.
+"""WSGI config for debug project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

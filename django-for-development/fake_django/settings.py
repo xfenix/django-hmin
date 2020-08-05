@@ -1,5 +1,4 @@
-"""Django settings for fake_django project.
-"""
+"""Django settings for fake_django project."""
 import os
 import pathlib
 
