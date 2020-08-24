@@ -1,7 +1,7 @@
 """Core logic module."""
 from __future__ import annotations
-import re
 import logging
+import re
 
 
 LOGGER_INST: logging.Logger = logging.getLogger(__file__)
@@ -12,7 +12,7 @@ RE_SAFE_EXCLUDE_TAGS_RE: re.Pattern = re.compile(
 )
 RE_COMMENTS: re.Pattern = re.compile(r"<!--(?!\[if.*?\]).*?-->", flags=RE_FLAGS)
 RE_PLACEHOLDER: re.Pattern = re.compile(r"%s" % PLACEHOLDER.replace("%s", "([0-9]+)"))
-RE_LEFT_SPACES_AROUND_TAGS: re.Pattern = re.compile(r"(?:\s|)(<.*?>)(?:\s|)", flags=re.S | re.I | re.U)
+RE_LEFT_SPACE_AFTER_OPEN_TAG: re.Pattern = re.compile(r"(<.*?>)(?:\s)", flags=re.S | re.I | re.U)
 
 
 def html_minify(data_input: str, remove_comments=True) -> str:
@@ -33,7 +33,10 @@ def html_minify(data_input: str, remove_comments=True) -> str:
     data_input = " ".join(data_input.split())
     # "strip_space_between_tags"
     data_input = data_input.replace("> <", "><")
-    data_input = RE_LEFT_SPACES_AROUND_TAGS.sub(r"\1", data_input)
+    # clean space before closed tag (it safe operation)
+    data_input = data_input.replace(" </", "</")
+    # clean space after open tag
+    data_input = RE_LEFT_SPACE_AFTER_OPEN_TAG.sub(r"\1", data_input)
     if remove_comments:
         data_input = RE_COMMENTS.sub("", data_input)
 

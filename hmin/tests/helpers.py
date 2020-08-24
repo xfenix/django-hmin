@@ -15,7 +15,7 @@ TYPICAL_HTML_CASES: tuple = (
         """<div data-kek=\"500\">  hey    
             <p> <!-- trash -->
             """,
-        '<div data-kek="500">hey<p>',
+        '<div data-kek="500">hey <p>',
     ),
     (
         """<!-- comments by default is removing -->
@@ -27,7 +27,7 @@ TYPICAL_HTML_CASES: tuple = (
             <a href="#"> There is no doubt   </a>
             </div>
             """,
-        'yeap<div><a href="#">There is no doubt</a></div>',
+        'yeap <div><a href="#">There is no doubt</a></div>',
     ),
     (
         """
@@ -47,7 +47,7 @@ TYPICAL_HTML_CASES: tuple = (
     ("privet    >   1000    <           kak", "privet > 1000 < kak",),
     ("         ", ""),
     ("<div> </div>", "<div></div>"),
-    ('<b> hm <a href="#">what</a> </b>', '<b>hm<a href="#">what</a></b>'),
+    ('<b> hm <a href="#">what</a> </b>', '<b>hm <a href="#">what</a></b>'),
 )
 
 
