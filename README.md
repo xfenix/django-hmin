@@ -1,5 +1,4 @@
-django-hmin
-===
+# django-hmin
 
 ![Build and publish](https://github.com/xfenix/django-hmin/workflows/Build%20and%20publish/badge.svg)
 [![PyPI version](https://badge.fury.io/py/django-hmin.svg)](https://badge.fury.io/py/django-hmin)
@@ -17,41 +16,42 @@ For best expirience use it with https://github.com/django-compressor/django-comp
 Written in modern python 3.7+ with fully typing-covered codebase.
 
 Full support of:
-* https://www.python.org/dev/peps/pep-0526/
-* https://www.python.org/dev/peps/pep-0484/
-* https://www.python.org/dev/peps/pep-0008/
-* https://www.python.org/dev/peps/pep-0257/
-* https://www.python.org/dev/peps/pep-0518/
-* https://www.python.org/dev/peps/pep-0585/
 
+- https://www.python.org/dev/peps/pep-0526/
+- https://www.python.org/dev/peps/pep-0484/
+- https://www.python.org/dev/peps/pep-0008/
+- https://www.python.org/dev/peps/pep-0257/
+- https://www.python.org/dev/peps/pep-0518/
+- https://www.python.org/dev/peps/pep-0585/
 
-Compatibility
-===
-* Python 3.7+
-* Django 2.0+ (not required)
+# Compatibility
 
+- Python 3.7+
+- Django 2.0+ (not required)
 
-Install
-===
+# Install
 
 ### Regular way
+
 For install django-hmin, run on terminal:
+
 ```bash
 $ pip install django-hmin
 ```
 
 ### Advanced
+
 If there is no release, or you dont want/cant use pypi, then:
-* `git clone` this repo
-* `pipenv install` to install requirements or just `pip install flit`
-* `flit install`
-Yes, we dont use classic `setup.py`, we use flit + `pyproject.toml`. Go bless PEP-518 + PEP-621.
 
+- `git clone` this repo
+- `pipenv install` to install requirements or just `pip install flit`
+- `flit install`
+  Yes, we dont use classic `setup.py`, we use flit + `pyproject.toml`. Go bless PEP-518 + PEP-621.
 
-Using with Django as midleware
-===
+# Using with Django as midleware
 
-All you need to do is add two middlewares to your ``MIDDLEWARE_CLASSES``:
+All you need to do is add two middlewares to your `MIDDLEWARE_CLASSES`:
+
 ```python
 MIDDLEWARE_CLASSES: tuple = (
     # other middleware classes
@@ -60,9 +60,10 @@ MIDDLEWARE_CLASSES: tuple = (
 )
 ```
 
-If you're using Django's caching middleware, ``MarkMiddleware``
-should go after ``FetchFromCacheMiddleware``, and ``MinMiddleware``
-should go after ``UpdateCacheMiddleware``:
+If you're using Django's caching middleware, `MarkMiddleware`
+should go after `FetchFromCacheMiddleware`, and `MinMiddleware`
+should go after `UpdateCacheMiddleware`:
+
 ```python
 MIDDLEWARE_CLASSES: tuple = (
     'django.middleware.cache.UpdateCacheMiddleware',
@@ -73,44 +74,54 @@ MIDDLEWARE_CLASSES: tuple = (
 )
 ```
 
-You can optionally specify the ``HTML_MINIFY`` setting:
+You can optionally specify the `HTML_MINIFY` setting:
+
 ```python
 HTML_MINIFY: bool = True
 ```
 
-The default value for the ``HTML_MINIFY`` setting is ``not DEBUG``. You only
-need to set it to ``True`` if you want to minify your HTML code when ``DEBUG``
+The default value for the `HTML_MINIFY` setting is `not DEBUG`. You only
+need to set it to `True` if you want to minify your HTML code when `DEBUG`
 is enabled.
 
 ### URL exclude
+
 Specify setting:
+
 ```python
 HMIN_EXCLUDE: tuple = ('^base/', '^admin/')
 ```
 
 ### Keep HTML comments
+
 Specify settings:
+
 ```python
 HMIN_REMOVE_COMMENTS: bool = False
 ```
 
 ### Cache
+
 By default hmin middleware uses cache via django caches framework (very useful for small and middle web sites, and for big you definitely will use ngx_pagespeed or other "big" solutions).
 You can disable it by specify setting:
+
 ```python
 HMIN_USE_CACHE: bool = False
 ```
 
 Also you can change time and cache backend (if you want, by default time is 3600, cache backend — "default"):
+
 ```python
 HMIN_CACHE_TIMEOUT: int = 86400
 HMIN_CACHE_BACKEND: str = 'my_cache'
 ```
 
-Another using scenarios
-===
+# More using scenarios
+
 ### Decorators
+
 Just import decorator minify_plain: `from hmin.decorators import minify_plain`, than you can minify any function you want:
+
 ```python
 @minify_plain()
 def my_cool_func():
@@ -119,6 +130,7 @@ def my_cool_func():
 ```
 
 Or, if you want to keep html comments:
+
 ```python
 @minify_plain(False)
 def my_cool_func():
@@ -127,7 +139,9 @@ def my_cool_func():
 ```
 
 ### Solo
+
 Just import function minify. Function definition: `def minify(content, remove_comments=True)`. Example:
+
 ```python
 from hmin import html_minify
 
@@ -136,44 +150,53 @@ html_minify('<div>     hello</div>') # <div>hello</div>
 ```
 
 ### CLI
+
 ```bash
 $ python -m hmin filename.html > filename.min.html
 ```
 
+# Benchmarking (wannabe)
 
-Benchmarking (wannabe)
-==
 ### New data
+
 I try to compress 1.1mb of very dense html on my i7 laptop processor (2020 edition!) and measure raw time with chrome inspector.  
 I got following data (this data comes from field "Waiting (TTFB)", not "Content Download"):
-* htmlmin took about **2.5 seconds**!
-* this package took **100ms**
+
+- htmlmin took about **2.5 seconds**!
+- this package took:
+  - ~**100ms** (verion 0.5.2)
+  - ~**60ms** (version 0.5.3) — i fixed some bug in regexp, now package doesnt strip spaces BEFORE open tag, cause it was incorrect behaviour. So, now speed is like previous version. Yes! :)
+
 As you can see, hmin 0.5+ are slightly slower than 0.3, but this is comes from updated minifcation logic. In previous version minification was not so accurate, as i think. But, hmin still very much faster.  
 Maybe in the next releases i made some experiments with cython or numba to improve speed.
 
 ### Old data (version < 0.5)
+
 #### Stupid speed benchmark (1)
+
 I try to compress 1mb of html (i think, your usual html is slightly thiner) on my i7 laptop processor and measure time with django-debug-toolbar.  
-Django overhead took about 40ms (all), this is time without  minification, just plain html, django, etc.  
+Django overhead took about 40ms (all), this is time without minification, just plain html, django, etc.  
 Then i install hmin and htmlmin and just look at the debug toolbar numbers (this is very silly and simple "benchmark"):
-* with hmin cpu was about **60ms** (min)
-* with htmlmin cpu was about **1200ms** (min)
-Minus overhead, plain time: hmin — **20ms**, htmlmin — **1160ms**.  
-Probably, you can get other numbers. But hmin really faster than  htmlmin.
+
+- with hmin cpu was about **60ms** (min)
+- with htmlmin cpu was about **1200ms** (min)
+  Minus overhead, plain time: hmin — **20ms**, htmlmin — **1160ms**.  
+  Probably, you can get other numbers. But hmin really faster than htmlmin.
 
 #### Stupid speed benchmark (2)
+
 Also i try to compress 2mb of html on my desktop i3 (sandy bridge).  
 Debug toolbar time:
-* with hmin cpu was about **220ms** without cache, and **87ms** with cache
-* with htmlmin cpu was about **125000ms**
-Django overhead was about **80ms**.  
-Minus overhead, plain time: hmin — **140ms** (**7ms** with cache), htmlmin — ok.
 
+- with hmin cpu was about **220ms** without cache, and **87ms** with cache
+- with htmlmin cpu was about **125000ms**
+  Django overhead was about **80ms**.  
+  Minus overhead, plain time: hmin — **140ms** (**7ms** with cache), htmlmin — ok.
 
-Changelog
-==
+# Changelog
+
 You can check https://github.com/xfenix/django-hmin/releases release page.
 
-Current possible problems
-==
-* Doesnt respect CDATA
+# Current possible problems
+
+- Doesnt respect CDATA
