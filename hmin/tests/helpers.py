@@ -48,6 +48,7 @@ TYPICAL_HTML_CASES: tuple = (
     ("         ", ""),
     ("<div> </div>", "<div></div>"),
     ('<b> hm <a href="#">what</a> </b>', '<b>hm <a href="#">what</a></b>'),
+    ('<span>          good text   </span>  for all people', '<span>good text</span> for all people'),
 )
 
 

@@ -1,13 +1,13 @@
 """Django middleware."""
 from __future__ import annotations
+import logging
 import re
 import typing
-import logging
 
 from django.conf import settings
-from django.http import HttpResponse, HttpRequest
+from django.core.cache import InvalidCacheBackendError, caches
 from django.core.cache.backends.base import BaseCache
-from django.core.cache import caches, InvalidCacheBackendError
+from django.http import HttpRequest, HttpResponse
 
 from .base import html_minify
 
@@ -73,7 +73,7 @@ class MinMiddleware(_BasicMiddleware):
         response: HttpResponse = self.get_response(request)
 
         # prevent from minifying cached pages
-        if not hasattr(request, "need_to_minify") or not request.need_to_minify:
+        if not MINIFICATION_ENABLED or not hasattr(request, "need_to_minify") or not request.need_to_minify:
             return response
 
         # prevent from minifying excluded pages
@@ -83,7 +83,7 @@ class MinMiddleware(_BasicMiddleware):
                 if one_regex.match(current_path):
                     return response
 
-        if "Content-Type" in response and "text/html" in response["Content-Type"] and MINIFICATION_ENABLED:
+        if "Content-Type" in response and "text/html" in response["Content-Type"]:
             body_content: str = response.content.decode()
             minified_content: str = ""
             if USE_CACHE:

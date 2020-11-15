@@ -1,10 +1,8 @@
 """Core logic module."""
 from __future__ import annotations
-import logging
 import re
 
 
-LOGGER_INST: logging.Logger = logging.getLogger(__file__)
 RE_FLAGS: re.RegexFlag = re.S | re.I
 PLACEHOLDER: str = "<@!hmin_placeholder_%s_!@>"
 RE_SAFE_EXCLUDE_TAGS_RE: re.Pattern = re.compile(
@@ -12,7 +10,7 @@ RE_SAFE_EXCLUDE_TAGS_RE: re.Pattern = re.compile(
 )
 RE_COMMENTS: re.Pattern = re.compile(r"<!--(?!\[if.*?\]).*?-->", flags=RE_FLAGS)
 RE_PLACEHOLDER: re.Pattern = re.compile(r"%s" % PLACEHOLDER.replace("%s", "([0-9]+)"))
-RE_LEFT_SPACE_AFTER_OPEN_TAG: re.Pattern = re.compile(r"(<.*?>)(?:\s)", flags=re.S | re.I | re.U)
+RE_LEFT_SPACE_AFTER_OPEN_TAG: re.Pattern = re.compile(r"(<[^/].*?>)(?:\s)", flags=re.S | re.I | re.U)
 
 
 def html_minify(data_input: str, remove_comments=True) -> str:
