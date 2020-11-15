@@ -59,5 +59,5 @@ def load_html_fixtures() -> tuple[dict[str, str]]:
     for one_file in DATA_PATH.glob("*.html"):
         map_of_files[one_file.stem.replace(MIN_INFIX, "")][
             "min" if MIN_INFIX in one_file.stem else "original"
-        ] = one_file.read_text()
+        ] = one_file.read_text().strip()
     return tuple(map_of_files.values())
