@@ -46,7 +46,7 @@ If there is no release, or you dont want/cant use pypi, then:
 - `git clone` this repo
 - `pipenv install` to install requirements or just `pip install flit`
 - `flit install`
-  Yes, we dont use classic `setup.py`, we use flit + `pyproject.toml`. Go bless PEP-518 + PEP-621.
+  Yes, we dont use classic `setup.py`, we use flit + `pyproject.toml`. God bless PEP-518 + PEP-621.
 
 # Using with Django as midleware
 
